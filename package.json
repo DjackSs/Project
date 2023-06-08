@@ -1,0 +1,28 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "3WA project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DjackSs/Project.git"
+  },
+  "author": "nh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DjackSs/Project/issues"
+  },
+  "homepage": "https://github.com/DjackSs/Project#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mysql": "^2.18.1",
+    "uuid": "^9.0.0"
+  }
+}
