@@ -29,10 +29,10 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `User` (
   `id` char(36) NOT NULL PRIMARY KEY,
-  `pseudo` varchar(255) NOT NULL
-  `email` varchar(255) NOT NULL
+  `pseudo` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `dateInscription` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `mdp` varchar(255) NOT NULL
+  `mdp` varchar(255) NOT NULL,
   `role` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -45,7 +45,7 @@ CREATE TABLE `User` (
 CREATE TABLE `Panier` (
   `id` char(36) NOT NULL PRIMARY KEY,
   `idUserPanier` char(36) NOT NULL,
-  `prixPanier` int(10) NOT NULL,
+  `prixPanier` decimal(8,2) NOT NULL,
   `dateCreation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `dateCloture` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `statut` varchar(255) NOT NULL,
@@ -60,13 +60,13 @@ CREATE TABLE `Panier` (
 -- Structure de la table `Produit`
 --
 
-CREATE TABLE `Comentaire` (
+CREATE TABLE `Produit` (
   `id` char(36) NOT NULL PRIMARY KEY,
   `idPanier` char(36) NOT NULL,
   `nom` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `category` varchar(255) NOT NULL,
-  `prix` int(10) NOT NULL,
+  `prix` decimal(8,2) NOT NULL,
   Foreign KEY (idPanier) REFERENCES Panier (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

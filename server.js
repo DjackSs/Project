@@ -9,7 +9,7 @@ const app = express();
 // -------------import the session's management tool
 import session from "express-session";
 
-// -------------import the routes managment file
+// -------------import the routes manager
 import router from './routes/router.js';
 
 
@@ -35,6 +35,9 @@ app.use("/", router);
 // -------------session management middleware
 app.use(function (req,res,next)
 {
+    res.locals.isAdmin = req.session.isAdmin ? true : false;
+    
+    res.locals.isClient = req.session.isClient ? true : false;
     
     next();
     
