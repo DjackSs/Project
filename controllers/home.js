@@ -1,8 +1,12 @@
 
 
 
-export default (req, res) => 
+export  default (req, res) => 
 {
-    res.render('layout', {template: 'home'});
+    res.render('layout.ejs',
+    {
+        template: 'home.ejs'
+        
+    });
 };
     

@@ -4,14 +4,14 @@
 
 import express from "express";
 
-const router = express.router();
+const router = express.Router();
 
 
 // ==============================================
 // CONTROLLERS SET UP
 // ==============================================
 
-import Home from "../controllers/home.js";
+import home from "../controllers/home.js";
 
 
 
@@ -22,12 +22,14 @@ import Home from "../controllers/home.js";
 
 
 
+
+
 // ==============================================
 // ROUTES
 // ==============================================
 
 //HOME PAGE
-
+router.get("/", home);
 
 
 export default router;
