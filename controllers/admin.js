@@ -21,7 +21,7 @@ export const profileAdmin = (req, res) =>
 {
     const query1 = `select * from Produit`;
     
-    const query2 = `select * from User`;
+    const query2 = `select id, pseudo, email, dateInscription from User where role in ("client")`;
     
     pool.query(query1, function (error, produits, fields)
     {

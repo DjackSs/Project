@@ -65,7 +65,6 @@ app.use((req,res,next)=>
     {
         res.locals.idClient = req.session.idClient;
         
-        next();
     }
     
     next();

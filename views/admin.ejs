@@ -1,7 +1,9 @@
 <h2>Admin page</h2>
+
 <form method="post" action="/logout">
     <input type="submit" value="Deconnexion">
 </form>
+
 <section>
     <h3>Ajouter un produit</h3>
     
@@ -26,7 +28,6 @@
         
     </form>
     
-    
     <h3>Produit en vente :</h3>
     
     	<table>
@@ -38,6 +39,7 @@
     		</thead>
     		<tbody >
     			<% for(let produit of produits) { %>
+    			
     				<tr id="<%= produit.id %>">
     					<td>
     						<%= produit.nom %>
@@ -52,8 +54,37 @@
     	                    <%= produit.prix %>
     	                </td>
     				</tr>
+    				
     			<% } %>
     		</tbody>
     	</table>
-
+</section>
+<section>
+    <h3>Gestion des clients :</h3>
+    
+    <table>
+    		<thead>
+    				<th>Nom</th>
+    	            <th>Email</th>
+    	            <th>Date inscription</th>
+    		</thead>
+    		<tbody >
+    			<% for(let client of clients) { %>
+    			
+    				<tr id="<%= client.id %>">
+    					<td>
+    						<%= client.pseudo %>
+    					</td>
+    					<td>
+    					    <%= client.email %>
+    					</td>
+    					<td>
+    					    <%= client.dateInscription.toLocaleString() %>
+    					</td>
+    				</tr>
+    				
+    			<% } %>
+    		</tbody>
+    	</table>
+    
 </section>
