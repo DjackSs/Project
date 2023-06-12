@@ -1,6 +1,8 @@
 // ==============================================
 // TOOLS
 // ==============================================
+// -------------import env variable manager
+import "dotenv/config";
 
 // -------------import express framework
 import express from "express";
@@ -28,11 +30,23 @@ app.use(express.static("public"));
 // -------------set views as ejs template
 app.set("views", "./views");
 
-// -------------set the router call
-app.use("/", router);
-
 
 // -------------session management middleware
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: 
+    {
+        secure: false,
+        maxAge: 30*60*1000
+        
+    }
+    
+}));
+
+
 app.use(function (req,res,next)
 {
     res.locals.isAdmin = req.session.isAdmin ? true : false;
@@ -48,7 +62,13 @@ app.use(function (req,res,next)
 // SERVER LAUNCHING
 // ==============================================
 
-const PORT = 3000;
+// -------------set the router call, this must be after all the middleware set up!!
+app.use("/", router);
+
+
+// const PORT = 3000;
+
+const PORT = process.env.PORT;
 
 app.listen(PORT,()=>
 {
@@ -56,4 +76,3 @@ app.listen(PORT,()=>
 });
 
 
-// http://nathanhamon.ide.3wa.io:3000/

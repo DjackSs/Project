@@ -58,20 +58,6 @@ export const art_page2 = (req, res) =>
 // ----------------------------------------------------
 
 
-export const inscription = (req, res) =>
-{
-    res.render('layout.ejs',
-    {
-        template: 'inscription.ejs'
-        
-    });
-    
-};
-
-
-// ----------------------------------------------------
-
-
 export const inscriptionPost = (req, res) =>
 {
     bcrypt.hash(req.body.mdp, 10, function (error, hash)

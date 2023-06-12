@@ -11,9 +11,11 @@ const router = express.Router();
 // CONTROLLERS SET UP
 // ==============================================
 
-import {home, art_page1, art_page2, inscription, inscriptionPost} from "../controllers/home.js";
+import {home, art_page1, art_page2, inscriptionPost} from "../controllers/home.js";
 
-import {login, loginPost} from "../controllers/client.js";
+import {login, loginPost, profile, logout} from "../controllers/client.js";
+
+import {profileAdmin} from "../controllers/admin.js";
 
 
 
@@ -30,7 +32,19 @@ const adminCheck = function (req, res, next) {
     } 
     else 
     {
-        res.redirect('/loginform');
+        res.redirect('/login');
+    }
+};
+
+const clientCheck = function (req, res, next) {
+
+    if(req.session.isClient) 
+    {
+        next();
+    } 
+    else 
+    {
+        res.redirect('/login');
     }
 };
 
@@ -48,18 +62,24 @@ router.get("/scrapbooking", art_page1);
 router.get("/art_numerique", art_page2);
 
 
-//SIGN IN PAGE
-router.get("/sign_in", inscription);
+//SIGN IN PAGE / LOGIN PAGE
 
-router.post("/sign_in/post", inscriptionPost);
-
-//LOGIN PAGE
 router.get("/login", login);
 
 router.post("/login/post", loginPost);
 
+router.post("/sign_in/post", inscriptionPost);
+
+//PROFILE PAGE
+
+router.get("/profile/:id", clientCheck, profile);
+
+router.post("/logout", logout);
+
 
 //ADMIN PAGE
+
+router.get("/admin", adminCheck, profileAdmin);
 
 
 export default router;
