@@ -46,12 +46,27 @@ app.use(session({
     
 }));
 
-
+// -------------session's middleware for account status
 app.use(function (req,res,next)
 {
     res.locals.isAdmin = req.session.isAdmin ? true : false;
     
     res.locals.isClient = req.session.isClient ? true : false;
+    
+    next();
+    
+});
+
+
+// -------------session's middleware for clients account's id
+app.use((req,res,next)=>
+{
+    if(req.session.idClient)
+    {
+        res.locals.idClient = req.session.idClient;
+        
+        next();
+    }
     
     next();
     
@@ -65,8 +80,6 @@ app.use(function (req,res,next)
 // -------------set the router call, this must be after all the middleware set up!!
 app.use("/", router);
 
-
-// const PORT = 3000;
 
 const PORT = process.env.PORT;
 

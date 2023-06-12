@@ -38,11 +38,12 @@ export const loginPost = (req, res) =>
         mdp: req.body.mdp
     };
     
-    const query = `select * from User where email = "${login.email}" `;
+    const query = `select * from User where email = ?`;
     
-    pool.query(query, function (error, result, fields) 
+    pool.query(query,[login.email], function (error, result, fields) 
     {
             if (error) console.log(error);
+            
 	       
 	            bcrypt.compare(login.mdp, result[0].mdp, function (error, isAllowed)
 	            {
@@ -53,28 +54,27 @@ export const loginPost = (req, res) =>
 	            		if(result[0].role === "client")
 		                {
 		                   req.session.isClient = true;
+		                   req.session.idClient = result[0].id;
 		                   
-		                   return res.redirect(`/profile/${result[0].id}`);
+		                   res.redirect(`/profile/${result[0].id}`);
 		                    
 		                }
 		                else if(result[0].role === "admin")
 		                {
 		                    req.session.isAdmin = true;
 		                    
-		                    return res.redirect("/admin");
+		                    res.redirect("/admin");
 		                }
 		                
 	            	}
 	            	else
 	            	{
-	            		return res.redirect('/login'); 
+	            		res.redirect('/login'); 
 	            	}
 	            	
 	            });
-		            		
 
 	  });
-    
     
 };
 
@@ -85,7 +85,7 @@ export const profile = (req, res) =>
 {
     res.render('layout.ejs',
     {
-        template: 'profile.ejs'
+        template: 'profile.ejs',
         
     });
 };

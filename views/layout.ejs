@@ -14,8 +14,22 @@
                 <a href="/">Home</a>
                 <a href="/scrapbooking">Scrapbooking</a>
                 <a href="/art_numerique">Art Numérique</a>
-                <a href="/sign_in">Inscription</a>
-                <a href="/login">Connexion</a>
+                
+                <% if(locals.isClient === true){ %>
+                
+                    
+                    <a href="/profile/<%= locals.idClient %>">Profile</a>
+                    
+                    
+                <% } else if(locals.isAdmin === true) { %>
+                    
+                    <a href="/admin">Profile</a>
+            
+                <% } else { %>
+                
+                    <a href="/login">Connexion</a>
+                    
+                <% } %>
             </nav>
         </div>
     </header>
