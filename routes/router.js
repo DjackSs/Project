@@ -15,7 +15,7 @@ import {home, art_page1, art_page2, inscriptionPost} from "../controllers/home.j
 
 import {login, loginPost, profile, logout} from "../controllers/client.js";
 
-import {profileAdmin} from "../controllers/admin.js";
+import {profileAdmin, addProductPost} from "../controllers/admin.js";
 
 
 
@@ -80,6 +80,8 @@ router.post("/logout", logout);
 //ADMIN PAGE
 
 router.get("/admin", adminCheck, profileAdmin);
+
+router.post("/addProductPost", adminCheck, addProductPost);
 
 
 export default router;

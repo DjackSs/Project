@@ -62,12 +62,10 @@ CREATE TABLE `Panier` (
 
 CREATE TABLE `Produit` (
   `id` char(36) NOT NULL PRIMARY KEY,
-  `idPanier` char(36) NOT NULL,
   `nom` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `category` varchar(255) NOT NULL,
-  `prix` decimal(8,2) NOT NULL,
-  Foreign KEY (idPanier) REFERENCES Panier (id) ON DELETE CASCADE
+  `prix` decimal(8,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -82,6 +80,19 @@ CREATE TABLE `Dialogue` (
   `comment` varchar(255) NOT NULL,
   `dateComment` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   Foreign KEY (idUserDialogue) REFERENCES User (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `Produit_Panier`
+--
+
+CREATE TABLE `Produit_Panier` (
+    `idPanier` char(36) NOT NULL,
+    `idProduit` char(36) NOT NULL,
+  Foreign KEY (idPanier) REFERENCES Panier (id) ON DELETE CASCADE,
+  Foreign KEY (idProduit) REFERENCES Produit (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

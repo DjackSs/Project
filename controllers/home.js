@@ -32,11 +32,23 @@ export const home = (req, res) =>
 
 export const art_page1 = (req, res) =>
 {
-    res.render('layout.ejs',
+    const query = `select * from Produit where category in ("scrapbooking")`;
+    
+    pool.query(query, function(error, produits, fields)
     {
-        template: 'scrapbooking.ejs'
+        if(error) console.log(error);
+        
+        
+        
+        res.render('layout.ejs',
+        {
+            template: 'scrapbooking.ejs',
+            produits: produits
+        
+        });
         
     });
+    
     
 };
 
@@ -46,12 +58,20 @@ export const art_page1 = (req, res) =>
 
 export const art_page2 = (req, res) =>
 {
-    res.render('layout.ejs',
+    const query = `select * from Produit where category in ("digital_art")`;
+    
+    pool.query(query, function(error, produits, fields)
     {
-        template: 'digital_art.ejs'
+        if(error) console.log(error);
+        
+        res.render('layout.ejs',
+        {
+            template: 'digital_art.ejs',
+            produits: produits
+        
+        });
         
     });
-    
 };
 
 

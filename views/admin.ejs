@@ -2,3 +2,58 @@
 <form method="post" action="/logout">
     <input type="submit" value="Deconnexion">
 </form>
+<section>
+    <h3>Ajouter un produit</h3>
+    
+    <form method="post" action="/addProductPost">
+        
+        <label for="name">Nom du produit</label>
+        <input type="text" name="name" id="name">
+        
+        <label for="description">Description</label>
+        <input type="text" name="description" id="description">
+        
+        <label for="category">Catégorie</label>
+        <select name="category" id="category">
+            <option value="scrapbooking" selected>Scrapbooking</option>
+            <option value="digital_art">Art Numérique</option>
+        </select>
+        
+        <label for="price">Prix</label>
+        <input type="text" name="price" id="price">
+        
+        <input type="submit" value="Ajouter">
+        
+    </form>
+    
+    
+    <h3>Produit en vente :</h3>
+    
+    	<table>
+    		<thead>
+    				<th>Nom</th>
+    	            <th>Description</th>
+    	            <th>Catégorie</th>
+    	            <th>Prix</th>
+    		</thead>
+    		<tbody >
+    			<% for(let produit of produits) { %>
+    				<tr id="<%= produit.id %>">
+    					<td>
+    						<%= produit.nom %>
+    					</td>
+    					<td>
+    					    <%= produit.description %>
+    					</td>
+    					<td>
+    					    <%= produit.category %>
+    					</td>
+    					<td>
+    	                    <%= produit.prix %>
+    	                </td>
+    				</tr>
+    			<% } %>
+    		</tbody>
+    	</table>
+
+</section>
