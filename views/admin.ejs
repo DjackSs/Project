@@ -30,7 +30,7 @@
     
     <h3>Produit en vente :</h3>
     
-    	<table>
+    	<table id="productTable">
     		<thead>
     				<th>Nom</th>
     	            <th>Description</th>
@@ -53,6 +53,9 @@
     					<td>
     	                    <%= produit.prix %>
     	                </td>
+    	                <td>
+    	                    <button class="js-removeProduit-button" data-produit="<%=produit.id%>">X</i></button>
+    	                </td>
     				</tr>
     				
     			<% } %>
@@ -62,7 +65,7 @@
 <section>
     <h3>Gestion des clients :</h3>
     
-    <table>
+    <table id="clientTable">
     		<thead>
     				<th>Nom</th>
     	            <th>Email</th>
@@ -80,6 +83,9 @@
     					</td>
     					<td>
     					    <%= client.dateInscription.toLocaleString() %>
+    					</td>
+    					<td>
+    					    <button class="js-removeClient-button" data-client="<%=client.id%>">X</i></button>
     					</td>
     				</tr>
     				

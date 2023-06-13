@@ -62,3 +62,33 @@ export const addProductPost = (req,res) =>
         error ? console.log(error) : res.redirect("/admin");
     });
 };
+
+// ----------------------------------------------------
+
+export const deleteProduit = (req,res) =>
+{
+    const deleteProduct = req.params.id;
+    
+    const query = `delete from Produit where id = ?`;
+    
+    pool.query(query, [deleteProduct], function(error, result, fields)
+    {
+        error ? console.log(error) : res.status(204).send();
+    });
+    
+};
+
+// ----------------------------------------------------
+
+export const deleteClient = (req,res) =>
+{
+    const deleteClient = req.params.id;
+    
+    const query = `delete from User where id = ?`;
+    
+    pool.query(query, [deleteClient], function(error, result, fields)
+    {
+        error ? console.log(error) : res.status(204).send();
+    });
+    
+};
