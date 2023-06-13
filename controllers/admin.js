@@ -92,3 +92,27 @@ export const deleteClient = (req,res) =>
     });
     
 };
+
+// ----------------------------------------------------
+
+export const editProduit = (req,res) =>
+{
+    let id = req.params.id;
+    
+    const editProduct =
+    {
+        nom: req.body.nom,
+        description: req.body.description,
+        category: req.body.category,
+        prix: req.body.prix
+    };
+
+    let query = `update Produit set ? where id = ?`;
+
+	pool.query(query, [editProduct, id], function (error, result, fields)
+	{
+	    error ? console.log(error) : res.status(204).send();
+
+	 });
+    
+};
