@@ -1,4 +1,15 @@
 <h2>Profile page</h2>
+
 <form method="post" action="/logout">
     <input type="submit" value="Deconnexion">
 </form>
+
+<section>
+    <H3>Panier</H3>
+    <% for(let produit of produits) { %>
+        <article>
+        <p><%= produit.nom %></p>
+        <p><%= produit.prix %></p>
+    </article>
+    <% } %>
+</section>

@@ -6,7 +6,7 @@ document.body.append(p);
 
 
 // ======================================================
-    // FETCH 
+    // ADMIN FETCH 
 // ======================================================
 
 
@@ -192,9 +192,7 @@ if (editProductButtons.length != 0)
                const options = 
                {
                     method: 'put',
-                    headers: {
-                        'content-type': 'application/json'
-                    },
+                    headers: {'content-type': 'application/json'},
                     body: JSON.stringify(newProductData)
                 };
                 
@@ -234,5 +232,56 @@ if (editProductButtons.length != 0)
     }
 }
 
+// ======================================================
+    // CLIENT FETCH
+// ======================================================
 
+const addProductButtons = document.querySelectorAll(".js-addProduit-button");
+
+if(addProductButtons.length != 0)
+{
+    for(let button of addProductButtons )
+    {
+        button.addEventListener("click", (e)=>
+        {
+            (e).preventDefault();
+            
+              // ----------------------fecth settings
+            
+            const idClient = button.getAttribute("data-addClient");
+            
+            const idProduct = button.getAttribute("data-addProduct");
+ 
+            const url = `/addToBasket/${idClient}`;
+            
+            const data =
+            {
+                idUserPanier: idClient,
+                idProduit: idProduct
+            };
+            
+            
+            const options = 
+               {
+                    method: 'post',
+                    headers: {'content-type': 'application/json'},
+                    body: JSON.stringify(data)
+                };
+            
+            // ----------------------fecth actions
+            
+            fetch(url, options)
+            .then(res =>
+            {
+                
+               
+                
+            })
+            .catch(err => console.error(err));
+            
+            
+            
+        });
+    }
+}
 

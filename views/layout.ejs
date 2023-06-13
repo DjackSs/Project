@@ -15,13 +15,13 @@
                 <a href="/scrapbooking">Scrapbooking</a>
                 <a href="/art_numerique">Art Numérique</a>
                 
-                <% if(locals.isClient === true){ %>
+                <% if(locals.isClient){ %>
                 
                     
                     <a href="/profile/<%= locals.idClient %>">Profile</a>
                     
                     
-                <% } else if(locals.isAdmin === true) { %>
+                <% } else if(locals.isAdmin) { %>
                     
                     <a href="/admin">Profile</a>
             

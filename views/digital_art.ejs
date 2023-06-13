@@ -2,10 +2,14 @@
 <section>
     <h2>Art numérique</h2>
     <% for(let produit of produits) { %>
-    <article>
+    <article id="<%= produit.id %>">
         <p><%= produit.nom %></p>
         <p><%= produit.description %></p>
         <p><%= produit.prix %></p>
+        
+        
+        <button class="js-addProduit-button" data-addProduct = "<%= produit.id %>" data-addClient="<%= locals.idClient %>">Ajouter au panier</button>
+        
     </article>
     <% } %>
 </section>

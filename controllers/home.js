@@ -97,12 +97,29 @@ export const inscriptionPost = (req, res) =>
                     role: "client"
                 };
                 
-            const query = "insert into User (id, pseudo, email, mdp, role, dateInscription) value (?, ?, ?, ?, ?, NOW())";
+            const newBasket =
+            	{
+            		id: uuidv4(),
+            		idUserPanier: newClient.id,
+            		prixPanier: 0,
+            		statut: "Cree"
+            	};
+                
+            const query1 = "insert into User (id, pseudo, email, mdp, role, dateInscription) value (?, ?, ?, ?, ?, NOW())";
+            
+            const query2 =`insert into Panier (id, idUserPanier, prixPanier, statut, dateCreation) value (?, ?, ?, ?, NOW())`;
     
     
-            pool.query( query, [newClient.id, newClient.pseudo, newClient.email, newClient.mdp, newClient.role], function (error, result, fields) 
+            pool.query( query1, [newClient.id, newClient.pseudo, newClient.email, newClient.mdp, newClient.role], function (error, result1, fields) 
             {
-                error ? console.log(error) : res.redirect("/");
+                if(error) console.log(error); 
+                
+                pool.query(query2, [newBasket.id, newBasket.idUserPanier,newBasket.prixPanier, newBasket.statut], function (error,result2, fields)
+                {
+                    error ? console.log(error) : res.redirect("/");
+                    
+                });
+                
         	        
         	});
             

@@ -83,11 +83,26 @@ export const loginPost = (req, res) =>
 
 export const profile = (req, res) => 
 {
-    res.render('layout.ejs',
-    {
-        template: 'profile.ejs',
-        
-    });
+
+	const userId = req.params.id;
+	
+	const query = `select Produit.* from Produit inner join Produit_Panier on idProduit = Produit.id inner join Panier on idPanier = Panier.id where idUserPanier = ?`;
+	
+	pool.query(query, [userId], function(error, produits, field)
+	{
+	
+		if(error) console.log(error);
+
+			
+		res.render('layout.ejs',
+		   {
+		    	template: 'profile.ejs',
+		    	produits: produits
+		        
+		    });
+
+	});
+    
 };
 
 
@@ -101,4 +116,25 @@ export const logout = (req, res) =>
 		error ? console.log(error) : res.redirect("/");
 		
 	});
+};
+
+// ----------------------------------------------------
+
+export const shoppingAdd = (req,res) =>
+{
+	
+	
+	const shopItem =
+	{
+		idUserPanier: req.params.id,
+		idProduit: req.body.idProduit
+	};
+	
+	const query = `insert into Produit_Panier (idPanier, idProduit) values ((select id from Panier where idUserPanier = ?), ?)`;
+	
+	pool.query(query,[shopItem.idUserPanier, shopItem.idProduit], function(error, result, fields)
+	{
+		error ? console.log(error) : res.status(204).send();
+	});
+	
 };
