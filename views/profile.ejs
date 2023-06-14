@@ -6,10 +6,14 @@
 
 <section>
     <H3>Panier</H3>
+    
     <% for(let produit of produits) { %>
-        <article>
+        <article id="<%= produit.id %>">
         <p><%= produit.nom %></p>
         <p><%= produit.prix %></p>
+        <p><button class="js-removeProduitPanier-button" data-produit="<%= produit.id %>">X</button> </p>
     </article>
     <% } %>
+    
+    <p>Prix total : <%= prixPanier %> </p>
 </section>

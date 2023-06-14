@@ -236,6 +236,9 @@ if (editProductButtons.length != 0)
     // CLIENT FETCH
 // ======================================================
 
+
+// ADD TO BASKET FETCH
+
 const addProductButtons = document.querySelectorAll(".js-addProduit-button");
 
 if(addProductButtons.length != 0)
@@ -251,6 +254,7 @@ if(addProductButtons.length != 0)
             const idClient = button.getAttribute("data-addClient");
             
             const idProduct = button.getAttribute("data-addProduct");
+            
  
             const url = `/addToBasket/${idClient}`;
             
@@ -285,3 +289,42 @@ if(addProductButtons.length != 0)
     }
 }
 
+
+// DELETE FROM BASKET FETCH
+
+const deleteProductBasketButtons = document.querySelectorAll(".js-removeProduitPanier-button");
+
+
+if(deleteProductBasketButtons.length != 0)
+{
+    for(let button of deleteProductBasketButtons)
+    {
+        button.addEventListener("click", (e)=>
+        {
+            // ----------------------fecth settings
+            
+            const id = button.getAttribute("data-produit");
+            
+            const url = `/deleteProduitPanier/${id}`;
+            
+            const options =
+            {
+                method: "delete",
+                header: {"Content-Type": "application/json"}
+                
+            };
+            
+            // ----------------------fecth actions
+            
+            fetch(url, options)
+            .then(res =>
+            {
+                // ---------------reload the page to update the total price in Database
+                window.location.reload();
+                
+            })
+            .catch(err => console.error(err));
+            
+        });
+    }
+}

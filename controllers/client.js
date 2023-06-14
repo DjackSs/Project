@@ -86,20 +86,37 @@ export const profile = (req, res) =>
 
 	const userId = req.params.id;
 	
-	const query = `select Produit.* from Produit inner join Produit_Panier on idProduit = Produit.id inner join Panier on idPanier = Panier.id where idUserPanier = ?`;
+	const query1 = `select Produit.* from Produit inner join Produit_Panier on idProduit = Produit.id inner join Panier on idPanier = Panier.id where idUserPanier = ?`;
 	
-	pool.query(query, [userId], function(error, produits, field)
+	const query2= `update Panier set prixPanier = ? where idUserPanier = ?`;
+	
+	pool.query(query1, [userId], function(error, produits, fields)
 	{
 	
 		if(error) console.log(error);
-
+		
+		let totalPrice= 0;
+		
+		for(let produit of produits)
+		{
+			totalPrice += produit.prix;
+		}
+		
+		
+		pool.query(query2, [totalPrice, userId], function(error, result, fields)
+		{
+			if(error) console.log(error);
 			
-		res.render('layout.ejs',
-		   {
+			res.render('layout.ejs',
+			{
 		    	template: 'profile.ejs',
-		    	produits: produits
+		    	produits: produits,
+		    	prixPanier: totalPrice
+		    	
 		        
 		    });
+			
+		});
 
 	});
     
@@ -132,9 +149,24 @@ export const shoppingAdd = (req,res) =>
 	
 	const query = `insert into Produit_Panier (idPanier, idProduit) values ((select id from Panier where idUserPanier = ?), ?)`;
 	
+	
 	pool.query(query,[shopItem.idUserPanier, shopItem.idProduit], function(error, result, fields)
 	{
 		error ? console.log(error) : res.status(204).send();
 	});
 	
+};
+
+// ----------------------------------------------------
+
+export const shoppingDelete = (req,res) =>
+{
+	const idProduit = req.params.id;
+	
+	const query = "delete from Produit_Panier where idProduit = ?";
+	
+	pool.query(query, [idProduit], function(error, result, fields)
+	{
+		error ? console.log(error) : res.status(204).send();
+	});
 };
