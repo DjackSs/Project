@@ -88,7 +88,12 @@ export const profile = (req, res) =>
 	
 	const query2= `update Panier set prixPanier = ? where idUserPanier = ?`;
 	
-	const query3 = `select comment, dateComment from Dialogue where idUserDialogue = ?`;
+	const query3 = `select commande, dateCommande from Commande where idUser = ?`;
+	
+// 	select User.pseudo,Commande.*, Dialogue.* from User
+// inner join Commande on Commande.idUser = User.id
+// inner join Dialogue on Dialogue.idCommande = Commande.id
+// where Commande.idUser ="caa65ca8-c425-4f06-9ce4-06e3673b180a"
 	
 	
 	pool.query(query1, [userId], function(error, produits, fields)
@@ -108,7 +113,7 @@ export const profile = (req, res) =>
 		{
 			if(error) console.log(error);
 			
-			pool.query(query3, [userId], function(error, comments, fields)
+			pool.query(query3, [userId], function(error, commandes, fields)
 			{
 				if(error) console.log(error);
 				
@@ -117,7 +122,7 @@ export const profile = (req, res) =>
 			    	template: 'profile.ejs',
 			    	produits: produits,
 			    	prixPanier: totalPrice,
-			    	comments: comments
+			    	commandes: commandes
 			    	
 			        
 			    });
@@ -188,13 +193,13 @@ export const customOrder = (req,res) =>
 	{
 		id: uuidv4(),
 		idClient: req.params.id,
-		description: customOrder
+		commande: customOrder
 		
 	};
 	
-	const query = `insert into Dialogue (id, idUserDialogue, comment, dateComment) values (?, ?, ?, NOW())`;
+	const query = `insert into Commande (id, idUser, commande, dateCommande) values (?, ?, ?, NOW())`;
 	
-	pool.query(query, [newOrder.id, newOrder.idClient, newOrder.description], function(error, result, feilds)
+	pool.query(query, [newOrder.id, newOrder.idClient, newOrder.commande], function(error, result, feilds)
 	{
 		error ? console.log(error) : res.status(204).send();
 	});

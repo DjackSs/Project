@@ -71,15 +71,30 @@ CREATE TABLE `Produit` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `Commande`
+--
+
+CREATE TABLE `Commande` (
+  `id` char(36) NOT NULL PRIMARY KEY,
+  `idUser` char(36) NOT NULL,
+  `commande` varchar(255) NOT NULL,
+  `dateCommande` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  Foreign KEY (idUser) REFERENCES User (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `Dialogue`
 --
 
 CREATE TABLE `Dialogue` (
   `id` char(36) NOT NULL PRIMARY KEY,
-  `idUserDialogue` char(36) NOT NULL,
+  `idCommande` char(36) NOT NULL,
   `comment` varchar(255) NOT NULL,
-  `dateComment` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  Foreign KEY (idUserDialogue) REFERENCES User (id) ON DELETE CASCADE
+  `dateDialogue` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  Foreign KEY (idCommande) REFERENCES Commande (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

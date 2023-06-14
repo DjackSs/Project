@@ -1,4 +1,4 @@
-<h2>Profile page</h2>
+<h2>Profile page : </h2>
 
 <form method="post" action="/logout">
     <input type="submit" value="Deconnexion">
@@ -21,11 +21,11 @@
 <section>
     <h3>Mes commandes</h3>
     
-    <% for(let comment of comments) { %>
+    <% for(let commande of commandes) { %>
     
     <article>
-        <p> <%= comment.dateComment.toLocaleString() %></p>
-        <p> <%= comment.comment %></p>
+        <p> <%= commande.dateCommande.toLocaleString() %></p>
+        <p> <%= commande.commande %></p>
     </article>
     
     <% } %>

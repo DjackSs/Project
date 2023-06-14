@@ -330,3 +330,54 @@ if(deleteProductBasketButtons.length != 0)
         });
     }
 }
+
+// ======================================================
+    // DIALOGUE FETCH
+// ======================================================
+
+// ADMIN SIDE
+
+const adminDialogueButtons = document.querySelectorAll(".js-adminDialogue-button");
+
+if(adminDialogueButtons.length != 0)
+{
+    for(let button of adminDialogueButtons)
+    {
+        button.addEventListener("click", (e)=>
+        {
+            (e).preventDefault();
+            
+            // ----------------------fecth settings
+            
+            const id = button.getAttribute("data-commande");
+            
+            const reply = 
+            {
+                comment: document.querySelector(`article[id="${id}"] textarea`).value,
+                idUser: button.getAttribute("data-client")
+            };
+            
+            const url = `/adminDialogue/${id}`;
+            
+                const options = 
+                {
+                    method: 'post',
+                    headers: {'content-type': 'application/json'},
+                    body: JSON.stringify(reply)
+                };
+            
+            // ----------------------fecth actions
+            
+            fetch(url, options)
+            .then(res =>
+            {
+                
+               
+                
+            })
+            .catch(err => console.error(err));
+            
+            
+        });
+    }
+}

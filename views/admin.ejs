@@ -95,3 +95,24 @@
     	</table>
     
 </section>
+<section>
+    <h3>Gestion des commandes :</h3>
+    
+    <% for(let commande of commandes) { %>
+    
+        <article id="<%= commande.id %>">
+            
+            <p><%= commande.dateCommande.toLocaleString() %> </p>
+            <p><%= commande.commande %></p>
+            
+            <label for="commandeDialogue">Dialoguer avec votre client :</label>
+            
+            <textarea name="commandeDialogue" id="commandeDialogue"></textarea>
+            
+            <button class="js-adminDialogue-button" data-commande="<%= commande.id %>" data-client="<%= commande.idUser %>">Envoi</button>
+            
+        </article>
+        
+    <% } %>
+    
+</section>

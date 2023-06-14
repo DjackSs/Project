@@ -32,12 +32,12 @@ export const home = (req, res) =>
 
 export const art_page1 = (req, res) =>
 {
-    
-    const query = `select Produit.*,idProduit from Produit left join Produit_Panier on idProduit = Produit.id where category in ("scrapbooking")`;
+    const query = `select Produit.*, Panier.idUserPanier from Produit left join Produit_Panier on idProduit = Produit.id left join Panier on Produit_Panier.idPanier = Panier.id where category in ("scrapbooking")`;
     
     pool.query(query, function(error, produits, fields)
     {
         if(error) console.log(error);
+        
         
         res.render('layout.ejs',
         {
@@ -57,7 +57,8 @@ export const art_page1 = (req, res) =>
 
 export const art_page2 = (req, res) =>
 {
-    const query = `select Produit.*,idProduit from Produit left join Produit_Panier on idProduit = Produit.id where category in ("digital_art")`;
+    
+    const query = `select Produit.*, idUserPanier from Produit left join Produit_Panier on idProduit = Produit.id left join Panier on Produit_Panier.idPanier = Panier.id where category in ("digital_art")`;
     
     pool.query(query, function(error, produits, fields)
     {

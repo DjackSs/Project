@@ -23,6 +23,8 @@ export const profileAdmin = (req, res) =>
     
     const query2 = `select id, pseudo, email, dateInscription from User where role in ("client")`;
     
+    const query3 = `select * from Commande`;
+    
     pool.query(query1, function (error, produits, fields)
     {
         if(error) console.log(error);
@@ -31,12 +33,20 @@ export const profileAdmin = (req, res) =>
         {
             if(error) console.log(error);
             
-            res.render("layout.ejs",
+            pool.query(query3, function(error, commandes, fields)
             {
-                template: "admin.ejs",
-                produits: produits,
-                clients: clients
+                if(error) console.log(error);
+                res.render("layout.ejs",
+                {
+                    template: "admin.ejs",
+                    produits: produits,
+                    clients: clients,
+                    commandes: commandes
+                    
+                });
+                
             });
+            
         });
     });
     
@@ -107,12 +117,32 @@ export const editProduit = (req,res) =>
         prix: req.body.prix
     };
 
-    let query = `update Produit set ? where id = ?`;
+    const query = `update Produit set ? where id = ?`;
 
 	pool.query(query, [editProduct, id], function (error, result, fields)
 	{
 	    error ? console.log(error) : res.status(204).send();
 
 	 });
+    
+};
+
+// ----------------------------------------------------
+
+export const adminDialogue = (req,res) =>
+{
+    const newAdminReply =
+    {
+        id: uuidv4(),
+        idCommande: req.params.id,
+        comment: req.body.comment,
+    };
+    
+    const query = "insert into Dialogue (id, idCommande, comment, dateDialogue) values (?, ?, ?, NOW())";
+    
+    pool.query(query, [newAdminReply.id, newAdminReply.idCommande, newAdminReply.comment], function(error, result, fields)
+    {
+        error ? console.log(error) : res.status(204).send();
+    });
     
 };
