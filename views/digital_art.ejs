@@ -2,14 +2,35 @@
 <section>
     <h2>Art numérique</h2>
     <% for(let produit of produits) { %>
+    
     <article id="<%= produit.id %>">
         <p><%= produit.nom %></p>
         <p><%= produit.description %></p>
         <p><%= produit.prix %></p>
         
+        <% if(locals.isClient && !produit.idProduit){ %>
         
         <button class="js-addProduit-button" data-addProduct = "<%= produit.id %>" data-addClient="<%= locals.idClient %>">Ajouter au panier</button>
         
+        <% } %>
+        
     </article>
     <% } %>
+    
 </section>
+
+<% if(locals.isClient) { %>
+
+<section>
+    <h2>Commande</h2>
+    
+    <form method="post" action="/order/<%= locals.idClient %>">
+        <label for="orderDigitalArt">Faite une commande personalisée!</label>
+        <textarea name="orderDigitalArt" id="orderDigitalArt" placeholder="formulez votre souhait"></textarea>
+        
+        <input type="submit" lavue="Envoyer">
+        
+    </form>
+</section>
+
+<% } %>

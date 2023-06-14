@@ -1,8 +1,4 @@
 
-let p = document.createElement("p");
-p.innerHTML = "world";
-
-document.body.append(p);
 
 
 // ======================================================
@@ -277,6 +273,12 @@ if(addProductButtons.length != 0)
             fetch(url, options)
             .then(res =>
             {
+                
+                const articleProduit = document.getElementById(`${idProduct}`);
+                
+                button.remove();
+                
+                articleProduit.append("Ajouté!");
                 
                
                 

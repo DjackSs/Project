@@ -1,4 +1,5 @@
 <section>
+    
     <h2>Scrapbooking</h2>
     
     <% for(let produit of produits) { %>
@@ -8,10 +9,31 @@
         <p><%= produit.description %></p>
         <p><%= produit.prix %></p>
         
+        <% if(locals.isClient && !produit.idProduit) { %>
         
         <button class="js-addProduit-button" data-addProduct = "<%= produit.id %>" data-addClient="<%= locals.idClient %>">Ajouter au panier</button>
         
+        <% } %>
+    
     </article>
+    
     <% } %>
+    
 </section>
+
+<% if(locals.isClient) { %>
+
+<section>
+    <h2>Commande</h2>
+    
+    <form method="post" action="/order/<%= locals.idClient %>">
+        <label for="orderScrapbooking">Faite une commande personalisée!</label>
+        <textarea name="orderScrapbooking" id="orderScrapbooking" placeholder="formulez votre souhait"></textarea>
+        
+        <input type="submit" lavue="Envoyer">
+        
+    </form>
+</section>
+
+<% } %>
 

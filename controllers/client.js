@@ -31,7 +31,6 @@ export const login = (req, res) =>
 
 export const loginPost = (req, res) => 
 {
-    
     const login =
     {
         email: req.body.email,
@@ -83,12 +82,14 @@ export const loginPost = (req, res) =>
 
 export const profile = (req, res) => 
 {
-
 	const userId = req.params.id;
 	
 	const query1 = `select Produit.* from Produit inner join Produit_Panier on idProduit = Produit.id inner join Panier on idPanier = Panier.id where idUserPanier = ?`;
 	
 	const query2= `update Panier set prixPanier = ? where idUserPanier = ?`;
+	
+	const query3 = `select comment, dateComment from Dialogue where idUserDialogue = ?`;
+	
 	
 	pool.query(query1, [userId], function(error, produits, fields)
 	{
@@ -107,14 +108,21 @@ export const profile = (req, res) =>
 		{
 			if(error) console.log(error);
 			
-			res.render('layout.ejs',
+			pool.query(query3, [userId], function(error, comments, fields)
 			{
-		    	template: 'profile.ejs',
-		    	produits: produits,
-		    	prixPanier: totalPrice
-		    	
-		        
-		    });
+				if(error) console.log(error);
+				
+				res.render('layout.ejs',
+				{
+			    	template: 'profile.ejs',
+			    	produits: produits,
+			    	prixPanier: totalPrice,
+			    	comments: comments
+			    	
+			        
+			    });
+				
+			});
 			
 		});
 
@@ -139,8 +147,6 @@ export const logout = (req, res) =>
 
 export const shoppingAdd = (req,res) =>
 {
-	
-	
 	const shopItem =
 	{
 		idUserPanier: req.params.id,
@@ -154,7 +160,6 @@ export const shoppingAdd = (req,res) =>
 	{
 		error ? console.log(error) : res.status(204).send();
 	});
-	
 };
 
 // ----------------------------------------------------
@@ -169,4 +174,29 @@ export const shoppingDelete = (req,res) =>
 	{
 		error ? console.log(error) : res.status(204).send();
 	});
+};
+
+// ----------------------------------------------------
+
+export const customOrder = (req,res) =>
+{
+	let customOrder;
+	
+	req.body.orderScrapbooking ? customOrder = req.body.orderScrapbooking : customOrder = req.body.orderDigitalArt;
+	
+	const newOrder =
+	{
+		id: uuidv4(),
+		idClient: req.params.id,
+		description: customOrder
+		
+	};
+	
+	const query = `insert into Dialogue (id, idUserDialogue, comment, dateComment) values (?, ?, ?, NOW())`;
+	
+	pool.query(query, [newOrder.id, newOrder.idClient, newOrder.description], function(error, result, feilds)
+	{
+		error ? console.log(error) : res.status(204).send();
+	});
+	
 };
