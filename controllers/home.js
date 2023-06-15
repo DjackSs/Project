@@ -32,17 +32,66 @@ export const home = (req, res) =>
 
 export const art_page1 = (req, res) =>
 {
-    const query = `select Produit.*, Panier.idUserPanier from Produit left join Produit_Panier on idProduit = Produit.id left join Panier on Produit_Panier.idPanier = Panier.id where category in ("scrapbooking")`;
+    console.log(req.session.idClient);
+    
+    let query = `select Produit.* from Produit where category in("scrapbooking")`;
+    
+    if(req.session.idClient)
+    {
+        query = `select Produit.*, Panier.idUserPanier from Produit left join Produit_Panier on idProduit = Produit.id left join Panier on Produit_Panier.idPanier = Panier.id where category in ("scrapbooking")`;
+    }
+
     
     pool.query(query, function(error, produits, fields)
     {
         if(error) console.log(error);
         
+        let sortedProduits = produits;
+        
+        if(req.session.idClient)
+        {
+            sortedProduits = processData (produits);
+        }
+        
+        // ---------------------------this function find duplicate and select the users's one
+        
+        function processData (array)
+        {
+            let newArray = [];
+            let name = array[0].nom;
+            let user = req.session.idClient;
+            
+            array.forEach((element)=>
+            {
+                console.log(element.nom);
+                
+                console.log(element.idUserPanier);
+        
+                if(element.nom === name)
+                {
+                    newArray.push(element);
+                    
+                }
+                else if (element.nom != name)
+                {
+                    newArray.push(element);
+                }
+          
+                name = element.nom;
+                
+            });
+            
+            return newArray;
+            
+        }
+        
+        // ---------------------------------------------------
+
         
         res.render('layout.ejs',
         {
             template: 'scrapbooking.ejs',
-            produits: produits
+            produits: sortedProduits
         
         });
         

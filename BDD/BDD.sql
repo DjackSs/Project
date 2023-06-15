@@ -92,9 +92,11 @@ CREATE TABLE `Commande` (
 CREATE TABLE `Dialogue` (
   `id` char(36) NOT NULL PRIMARY KEY,
   `idCommande` char(36) NOT NULL,
+  `idUser` char(36) NOT NULL,
   `comment` varchar(255) NOT NULL,
   `dateDialogue` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  Foreign KEY (idCommande) REFERENCES Commande (id) ON DELETE CASCADE
+  Foreign KEY (idCommande) REFERENCES Commande (id) ON DELETE CASCADE,
+  Foreign KEY (idUser) REFERENCES User (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

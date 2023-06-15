@@ -3,12 +3,11 @@
     <h2>Scrapbooking</h2>
     
     <% for(let produit of produits) { %>
-        <% if((produit.idUserPanier === locals.idClient) || !produit.idUserPanier) {%>
-    
-    <article id="<%= produit.id %>">
-        <p><%= produit.nom %></p>
-        <p><%= produit.description %></p>
-        <p><%= produit.prix %></p>
+        
+       <article id="<%= produit.id %>">
+            <p><%= produit.nom %></p>
+            <p><%= produit.description %></p>
+            <p><%= produit.prix %></p>
         
         <% if(locals.isClient && (produit.idUserPanier != locals.idClient)) { %>
         
@@ -17,8 +16,6 @@
         <% } %>
     
     </article>
-    
-        <% } %>
     
     <% } %>
     

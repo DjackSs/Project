@@ -73,24 +73,25 @@
     	            <th>Date inscription</th>
     		</thead>
     		<tbody >
-    			<% for(let client of clients) { %>
+    			<% for(let user of users) { 
+    			    if(user.role != "admin") {%>
     			
-    				<tr id="<%= client.id %>">
-    					<td>
-    						<%= client.pseudo %>
-    					</td>
-    					<td>
-    					    <%= client.email %>
-    					</td>
-    					<td>
-    					    <%= client.dateInscription.toLocaleString() %>
-    					</td>
-    					<td>
-    					    <button class="js-removeClient-button" data-client="<%=client.id%>">X</i></button>
-    					</td>
-    				</tr>
-    				
-    			<% } %>
+        				<tr id="<%= user.id %>">
+        					<td>
+        						<%= user.pseudo %>
+        					</td>
+        					<td>
+        					    <%= user.email %>
+        					</td>
+        					<td>
+        					    <%= user.dateInscription.toLocaleString() %>
+        					</td>
+        					<td>
+        					    <button class="js-removeClient-button" data-client="<%=user.id%>">X</i></button>
+        					</td>
+        				</tr>
+    				<% }
+    			} %>
     		</tbody>
     	</table>
     
@@ -103,13 +104,23 @@
         <article id="<%= commande.id %>">
             
             <p><%= commande.dateCommande.toLocaleString() %> </p>
+            <p> <%= commande.pseudo %></p>
+            <p> <%= commande.email %></p>
             <p><%= commande.commande %></p>
+            
+            <% for(let dialogue of dialogues) {
+                    if(commande.id === dialogue.idCommande) { %>
+                    <p><%= dialogue.pseudo %></p>
+                    <p><%= dialogue.dateDialogue.toLocaleString() %></p>
+                    <p><%= dialogue.comment %></p>
+                <% }
+            } %>
             
             <label for="commandeDialogue">Dialoguer avec votre client :</label>
             
             <textarea name="commandeDialogue" id="commandeDialogue"></textarea>
             
-            <button class="js-adminDialogue-button" data-commande="<%= commande.id %>" data-client="<%= commande.idUser %>">Envoi</button>
+            <button class="js-adminDialogue-button" data-transmitter="<%= locals.idAdmin %>" data-commande="<%= commande.id %>" data-client="<%= commande.idUser %>">Envoi</button>
             
         </article>
         

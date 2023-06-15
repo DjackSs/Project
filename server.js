@@ -63,6 +63,7 @@ app.use((req,res,next)=>
 {
     if(req.session.idClient) res.locals.idClient = req.session.idClient;
     
+    if(req.session.idAdmin) res.locals.idAdmin = req.session.idAdmin;
     
     next();
     

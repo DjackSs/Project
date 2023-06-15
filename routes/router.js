@@ -13,7 +13,7 @@ const router = express.Router();
 
 import {home, art_page1, art_page2, inscriptionPost} from "../controllers/home.js";
 
-import {login, loginPost, profile, logout, shoppingAdd, shoppingDelete, customOrder} from "../controllers/client.js";
+import {login, loginPost, profile, logout, shoppingAdd, shoppingDelete, customOrder, clientDialogue} from "../controllers/client.js";
 
 import {profileAdmin, addProductPost, deleteProduit, editProduit, deleteClient, adminDialogue} from "../controllers/admin.js";
 
@@ -76,6 +76,8 @@ router.post("/sign_in/post", inscriptionPost);
 router.get("/profile/:id", clientCheck, profile);
 
 router.post("/logout", logout);
+
+router.post("/clientDialogue/:id", clientCheck, clientDialogue);
 
 //SHOPPING PAGE
 

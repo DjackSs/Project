@@ -354,10 +354,62 @@ if(adminDialogueButtons.length != 0)
             const reply = 
             {
                 comment: document.querySelector(`article[id="${id}"] textarea`).value,
-                idUser: button.getAttribute("data-client")
+                idUser: button.getAttribute("data-client"),
+                idTransmitter: button.getAttribute("data-transmitter")
             };
             
+            
             const url = `/adminDialogue/${id}`;
+            
+                const options = 
+                {
+                    method: 'post',
+                    headers: {'content-type': 'application/json'},
+                    body: JSON.stringify(reply)
+                };
+            
+            // ----------------------fecth actions
+            
+            fetch(url, options)
+            .then(res =>
+            {
+                
+               
+                
+            })
+            .catch(err => console.error(err));
+            
+            
+        });
+    }
+}
+
+
+// CLIENT SIDE
+
+const clientDialogueButtons = document.querySelectorAll(".js-clientDialogue-button");
+
+if(clientDialogueButtons.length != 0)
+{
+    for(let button of clientDialogueButtons)
+    {
+        button.addEventListener("click", (e)=>
+        {
+            (e).preventDefault();
+            
+            // ----------------------fecth settings
+            
+            const id = button.getAttribute("data-commande");
+            
+            const reply = 
+            {
+                comment: document.querySelector(`article[id="${id}"] textarea`).value,
+                idUser: button.getAttribute("data-client"),
+                idTransmitter: button.getAttribute("data-transmitter")
+            };
+            
+            
+            const url = `/clientDialogue/${id}`;
             
                 const options = 
                 {

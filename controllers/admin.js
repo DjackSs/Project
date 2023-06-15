@@ -21,29 +21,40 @@ export const profileAdmin = (req, res) =>
 {
     const query1 = `select * from Produit`;
     
-    const query2 = `select id, pseudo, email, dateInscription from User where role in ("client")`;
+    const query2 = `select User.id, User.pseudo, User.email, User.dateInscription, User.role from User`;
     
-    const query3 = `select * from Commande`;
+    const query3 = `select Commande.*, User.pseudo, User.email from Commande inner join User on Commande.idUser = User.id`;
+    
+    const query4 = `select Dialogue.*, User.pseudo from Dialogue inner join User on User.id = Dialogue.idUser`;
     
     pool.query(query1, function (error, produits, fields)
     {
         if(error) console.log(error);
         
-        pool.query(query2, function (error, clients, fields)
+        pool.query(query2, function (error, users, fields)
         {
             if(error) console.log(error);
             
             pool.query(query3, function(error, commandes, fields)
             {
                 if(error) console.log(error);
-                res.render("layout.ejs",
+                
+                pool.query(query4, function(error, dialogues, field)
                 {
-                    template: "admin.ejs",
-                    produits: produits,
-                    clients: clients,
-                    commandes: commandes
+                    if(error) console.log(error);
+                    
+                    res.render("layout.ejs",
+                    {
+                        template: "admin.ejs",
+                        produits: produits,
+                        users: users,
+                        commandes: commandes,
+                        dialogues: dialogues
+                        
+                    });
                     
                 });
+                
                 
             });
             
@@ -131,16 +142,19 @@ export const editProduit = (req,res) =>
 
 export const adminDialogue = (req,res) =>
 {
+    
     const newAdminReply =
     {
         id: uuidv4(),
         idCommande: req.params.id,
         comment: req.body.comment,
+        idUser: req.body.idTransmitter
     };
     
-    const query = "insert into Dialogue (id, idCommande, comment, dateDialogue) values (?, ?, ?, NOW())";
     
-    pool.query(query, [newAdminReply.id, newAdminReply.idCommande, newAdminReply.comment], function(error, result, fields)
+    const query = "insert into Dialogue (id, idCommande, idUser, comment, dateDialogue) values (?, ?,(select User.id from User where id = ?), ?, NOW())";
+    
+    pool.query(query, [newAdminReply.id, newAdminReply.idCommande, newAdminReply.idUser, newAdminReply.comment], function(error, result, fields)
     {
         error ? console.log(error) : res.status(204).send();
     });

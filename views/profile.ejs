@@ -23,11 +23,30 @@
     
     <% for(let commande of commandes) { %>
     
-    <article>
-        <p> <%= commande.dateCommande.toLocaleString() %></p>
-        <p> <%= commande.commande %></p>
-    </article>
-    
+        <article id="<%= commande.id %>">
+            <p> <%= commande.dateCommande.toLocaleString() %></p>
+            <p> <%= commande.commande %></p>
+        
+        
+        <div>
+        <% for(let dialogue of dialogues) { %>
+            
+            
+                <p><%= dialogue.pseudo %></p>
+                <p><%= dialogue.dateDialogue.toLocaleString() %></p>
+                <p><%= dialogue.comment %></p>
+            
+        <% } %>
+        </div>
+       
+        <label for="commandeDialogueClient">Dialoguer avec l'artiste :</label>
+                
+        <textarea name="commandeDialogueClient" id="commandeDialogueClient"></textarea>
+                
+        <button class="js-clientDialogue-button"  data-transmitter="<%= locals.idClient %>" data-commande="<%= commande.id %>" data-client="<%= commande.idUser %>">Envoi</button>
+        
+        </article>
+        
     <% } %>
-    
+
 </section>

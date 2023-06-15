@@ -60,6 +60,7 @@ export const loginPost = (req, res) =>
 		                }
 		                else if(result[0].role === "admin")
 		                {
+		                	req.session.idAdmin = result[0].id;
 		                    req.session.isAdmin = true;
 		                    
 		                    res.redirect("/admin");
@@ -88,12 +89,9 @@ export const profile = (req, res) =>
 	
 	const query2= `update Panier set prixPanier = ? where idUserPanier = ?`;
 	
-	const query3 = `select commande, dateCommande from Commande where idUser = ?`;
+	const query3 = `select Commande.* from Commande where idUser = ?`;
 	
-// 	select User.pseudo,Commande.*, Dialogue.* from User
-// inner join Commande on Commande.idUser = User.id
-// inner join Dialogue on Dialogue.idCommande = Commande.id
-// where Commande.idUser ="caa65ca8-c425-4f06-9ce4-06e3673b180a"
+	const query4 = `select Dialogue.*, User.pseudo from Commande left join Dialogue on Dialogue.idCommande = Commande.id left join User on Dialogue.idUser = User.id where Commande.idUser = ?`;
 	
 	
 	pool.query(query1, [userId], function(error, produits, fields)
@@ -108,7 +106,6 @@ export const profile = (req, res) =>
 			totalPrice += produit.prix;
 		}
 		
-		
 		pool.query(query2, [totalPrice, userId], function(error, result, fields)
 		{
 			if(error) console.log(error);
@@ -117,15 +114,21 @@ export const profile = (req, res) =>
 			{
 				if(error) console.log(error);
 				
-				res.render('layout.ejs',
+				pool.query(query4, [userId], function(error, dialogues, fields)
 				{
-			    	template: 'profile.ejs',
-			    	produits: produits,
-			    	prixPanier: totalPrice,
-			    	commandes: commandes
-			    	
-			        
-			    });
+					if(error) console.log(error);
+					
+					res.render('layout.ejs',
+					{
+					    template: 'profile.ejs',
+					    produits: produits,
+					    prixPanier: totalPrice,
+					    commandes: commandes,
+					    dialogues: dialogues
+					        
+					   });
+					
+				});
 				
 			});
 			
@@ -204,4 +207,26 @@ export const customOrder = (req,res) =>
 		error ? console.log(error) : res.status(204).send();
 	});
 	
+};
+
+// ----------------------------------------------------
+
+export const clientDialogue = (req,res) =>
+{
+	const newClientReply =
+    {
+        id: uuidv4(),
+        idCommande: req.params.id,
+        comment: req.body.comment,
+        idUser: req.body.idTransmitter
+    };
+    
+    
+    const query = "insert into Dialogue (id, idCommande, idUser, comment, dateDialogue) values (?, ?,(select User.id from User where id = ?), ?, NOW())";
+    
+    pool.query(query, [newClientReply.id, newClientReply.idCommande, newClientReply.idUser, newClientReply.comment], function(error, result, fields)
+    {
+        error ? console.log(error) : res.status(204).send();
+    });
+    
 };
