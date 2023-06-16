@@ -1,8 +1,18 @@
 <h2>Admin page</h2>
+<section>
+    <article id="<%= locals.user.id %>">
+        <p><%= locals.user.pseudo %></p>
+        <p><%= locals.user.email %></p>
+        <button class="js-editProfile-button" data-profile="<%= locals.user.id %>">Edit Profile</button>
+    </article>
+    
+    
 
-<form method="post" action="/logout">
-    <input type="submit" value="Deconnexion">
-</form>
+    <form method="post" action="/logout">
+        <input type="submit" value="Deconnexion">
+    </form>
+
+</section>
 
 <section>
     <h3>Ajouter un produit</h3>
@@ -54,8 +64,8 @@
     	                    <%= produit.prix %>
     	                </td>
     	                <td>
-    	                    <button class="js-removeProduit-button" data-produit="<%=produit.id%>">X</i></button>
-    	                    <button class="js-editProduit-button" data-produit="<%=produit.id%>">Edit</i></button>
+    	                    <button class="js-removeProduit-button" data-produit="<%=produit.id%>">X</button>
+    	                    <button class="js-editProduit-button" data-produit="<%=produit.id%>">Edit</button>
     	                </td>
     				</tr>
     				
@@ -87,7 +97,7 @@
         					    <%= user.dateInscription.toLocaleString() %>
         					</td>
         					<td>
-        					    <button class="js-removeClient-button" data-client="<%=user.id%>">X</i></button>
+        					    <button class="js-removeClient-button" data-client="<%=user.id%>">X</button>
         					</td>
         				</tr>
     				<% }
@@ -108,19 +118,25 @@
             <p> <%= commande.email %></p>
             <p><%= commande.commande %></p>
             
+            <div>
             <% for(let dialogue of dialogues) {
                     if(commande.id === dialogue.idCommande) { %>
-                    <p><%= dialogue.pseudo %></p>
-                    <p><%= dialogue.dateDialogue.toLocaleString() %></p>
-                    <p><%= dialogue.comment %></p>
+                    <div>
+                        <p><%= dialogue.pseudo %></p>
+                        <p><%= dialogue.dateDialogue.toLocaleString() %></p>
+                        <p><%= dialogue.comment %></p>
+                    </div>
                 <% }
             } %>
+            </div>
             
             <label for="commandeDialogue">Dialoguer avec votre client :</label>
             
             <textarea name="commandeDialogue" id="commandeDialogue"></textarea>
             
-            <button class="js-adminDialogue-button" data-transmitter="<%= locals.idAdmin %>" data-commande="<%= commande.id %>" data-client="<%= commande.idUser %>">Envoi</button>
+            <button class="js-adminDialogue-button" data-transmitter="<%= locals.user.id %>" data-commande="<%= commande.id %>" data-client="<%= commande.idUser %>">Envoi</button>
+            
+            <button class="js-removeCommande-button" data-commande="<%= commande.id %>">Annuler la commande</button>
             
         </article>
         

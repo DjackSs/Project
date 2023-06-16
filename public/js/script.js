@@ -228,6 +228,8 @@ if (editProductButtons.length != 0)
     }
 }
 
+
+
 // ======================================================
     // CLIENT FETCH
 // ======================================================
@@ -331,6 +333,51 @@ if(deleteProductBasketButtons.length != 0)
     }
 }
 
+
+// DELETE COMMANDE FETCH
+
+const deleteCommandeButtons = document.querySelectorAll(".js-removeCommande-button");
+
+if(deleteCommandeButtons.length != 0)
+{
+    for(let button of deleteCommandeButtons)
+    {
+        button.addEventListener("click", (e)=>
+        {
+            (e).preventDefault();
+            
+            
+            // ----------------------fecth settings
+            
+            const id = button.getAttribute("data-commande");
+            
+            const url = `/deleteCommande/${id}`;
+            
+            const options =
+            {
+                method: "delete",
+                header: {"Content-Type": "application/json"}
+                
+            };
+            
+            // ----------------------fecth actions
+            
+            fetch(url, options)
+            .then(res =>
+            {
+                const commande = document.querySelector(`section article[id="${id}"`);
+                
+                commande.remove();
+                
+            })
+            .catch(err => console.error(err));
+            
+            
+        });
+    }
+}
+
+
 // ======================================================
     // DIALOGUE FETCH
 // ======================================================
@@ -373,6 +420,10 @@ if(adminDialogueButtons.length != 0)
             fetch(url, options)
             .then(res =>
             {
+                
+                const textArea = document.querySelector(`article[id="${id}"] textarea`);
+                
+                textArea.value = "";
                 
                
                 
@@ -424,6 +475,11 @@ if(clientDialogueButtons.length != 0)
             .then(res =>
             {
                 
+                const textArea = document.querySelector(`article[id="${id}"] textarea`);
+                
+                textArea.value = "";
+                
+                
                
                 
             })
@@ -432,4 +488,102 @@ if(clientDialogueButtons.length != 0)
             
         });
     }
+}
+
+
+// ======================================================
+    // EDIT PROFILE FETCH
+// ======================================================
+
+const editProfileButton = document.querySelector(".js-editProfile-button");
+
+if(editProfileButton)
+{
+    editProfileButton.addEventListener("click", (e)=>
+    {
+        (e).preventDefault();
+        
+        const id = editProfileButton.getAttribute("data-profile");
+        
+        // ----------------------DOM settings
+        
+        const article = document.querySelector(`article[id="${id}"]`);
+        
+        const oldPseudo = document.querySelector(`article[id="${id}"] p:first-child`);
+        
+        const oldEmail = document.querySelector(`article[id="${id}"] p:nth-child(2)`);
+        
+        
+        const newPseudo = document.createElement('input');
+            newPseudo.type="text";
+            newPseudo.name="editName";
+            newPseudo.value= oldPseudo.innerText;
+                    
+        const newEmail = document.createElement('input');
+            newEmail.type="text";
+            newEmail.name="editName";
+            newEmail.value= oldEmail.innerText;
+                    
+        const newButton = document.createElement("input");
+            newButton.type="submit";
+            newButton.value="Modifier";
+            
+        
+        
+        oldPseudo.innerHTML="";
+            oldPseudo.append(newPseudo);
+                
+        oldEmail.innerHTML="";
+            oldEmail.append(newEmail);
+            
+        article.removeChild(editProfileButton);
+        
+        article.append(newButton);
+        
+        newButton.addEventListener("click", (e)=>
+        {
+            e.preventDefault();
+            
+            const url = `/editProfile/${id}`;
+                    
+                    
+            const newProfile =
+            {
+                pseudo: newPseudo.value,
+                email: newEmail.value
+            };
+                
+            const options = 
+            {
+                method: 'put',
+                headers: {'content-type': 'application/json'},
+                body: JSON.stringify(newProfile)
+            };
+                    
+            fetch(url, options)
+            .then(res =>
+            {
+                        
+                oldPseudo.removeChild(newPseudo);
+                oldPseudo.append(newPseudo.value);
+                        
+                oldEmail.removeChild(newEmail);
+                oldEmail.append(newEmail.value);
+                        
+                        
+                article.removeChild(newButton);
+                        
+                article.append(editProfileButton);
+                        
+                        
+            })
+            .catch(err => console.error(err));
+                    
+            
+        });
+        
+        
+        
+    });
+    
 }

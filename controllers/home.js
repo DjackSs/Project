@@ -32,7 +32,6 @@ export const home = (req, res) =>
 
 export const art_page1 = (req, res) =>
 {
-    console.log(req.session.idClient);
     
     let query = `select Produit.* from Produit where category in("scrapbooking")`;
     
@@ -50,42 +49,10 @@ export const art_page1 = (req, res) =>
         
         if(req.session.idClient)
         {
-            sortedProduits = processData (produits);
+            sortedProduits = processData (produits, req.session.idClient);
         }
         
-        // ---------------------------this function find duplicate and select the users's one
         
-        function processData (array)
-        {
-            let newArray = [];
-            let name = array[0].nom;
-            let user = req.session.idClient;
-            
-            array.forEach((element)=>
-            {
-                console.log(element.nom);
-                
-                console.log(element.idUserPanier);
-        
-                if(element.nom === name)
-                {
-                    newArray.push(element);
-                    
-                }
-                else if (element.nom != name)
-                {
-                    newArray.push(element);
-                }
-          
-                name = element.nom;
-                
-            });
-            
-            return newArray;
-            
-        }
-        
-        // ---------------------------------------------------
 
         
         res.render('layout.ejs',
@@ -107,16 +74,28 @@ export const art_page1 = (req, res) =>
 export const art_page2 = (req, res) =>
 {
     
-    const query = `select Produit.*, idUserPanier from Produit left join Produit_Panier on idProduit = Produit.id left join Panier on Produit_Panier.idPanier = Panier.id where category in ("digital_art")`;
+    let query = `select Produit.* from Produit where category in("digital_art")`;
+    
+    if(req.session.idClient)
+    {
+        query = `select Produit.*, Panier.idUserPanier from Produit left join Produit_Panier on idProduit = Produit.id left join Panier on Produit_Panier.idPanier = Panier.id where category in ("digital_art")`;
+    }
     
     pool.query(query, function(error, produits, fields)
     {
         if(error) console.log(error);
         
+        let sortedProduits = produits;
+        
+        if(req.session.idClient)
+        {
+            sortedProduits = processData (produits, req.session.idClient);
+        }
+        
         res.render('layout.ejs',
         {
             template: 'digital_art.ejs',
-            produits: produits
+            produits: sortedProduits
         
         });
         
@@ -177,4 +156,47 @@ export const inscriptionPost = (req, res) =>
     });
     
 };
-    
+
+
+
+
+
+
+
+
+// ---------------------------This function process initial query on Produit.* / Produit_Panier.idPanier. If one product is in many client's card, this function find the current client's idPanier so that we don't display many copies of the same product on the page.
+        
+        function processData (array, idUser)
+        {
+            let newArray = [];
+            let nameArray = [];
+            let user = idUser;
+            
+            array.forEach((element)=>
+            {
+                if(nameArray.includes(element.nom))
+                {
+                    nameArray.push(element.nom);
+                    
+                    if(element.idUserPanier === user)
+                    {
+                        newArray.pop();
+                        
+                        newArray.push(element);
+                    }
+                    
+                }
+                else
+                {
+                    nameArray.push(element.nom);
+                    
+                    newArray.push(element);
+                }
+                
+            });
+            
+            return newArray;
+            
+        }
+        
+// ---------------------------------------------------

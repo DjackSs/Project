@@ -52,31 +52,37 @@ const processProduits = processData(produits);
 
 function processData (array)
 {
-    let newArray1 = [];
-    let newArray2 = [];
+    let newArray = [];
+    let nameArray = [];
     
-    array.forEach((element)=>
+    let idRef = "caa65ca8-c425-4f06-9ce4-06e3673b180a";
+    
+    for(let item of array)
     {
-        newArray1.push(element.nom);
- 
-        newArray2.push(element.idUserPanier);
+      
+      if(nameArray.includes(item.nom))
+      {
+        nameArray.push(item.nom);
+        
+        if(item.idUserPanier === idRef)
+        {
+          newArray.pop();
+          
+          newArray.push(item);
+        }
+      }
+      else
+      {
+        nameArray.push(item.nom);
+        
+        newArray.push(item);
+      }
+        
        
-    });
+    }
     
-    let array1 = newArray1.filter((element, index, arr) => arr.indexOf(element) !== index);
-
-    
-    let index = newArray1.indexOf(array1.toString());
-
-    
-    
-    
-    console.log(newArray1);
-    console.log(array1);
-    console.log(index);
-    console.log(newArray2);
-    
-    return newArray1;
+    return newArray;
+  
 }
 
-// console.log(processProduits);
+console.log(processProduits);

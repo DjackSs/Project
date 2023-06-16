@@ -3,6 +3,7 @@ node_modules/
 dist/
 
 # Fichiers
+test.js
 .env
 .DS_Store
 npm-debug.log*

@@ -13,7 +13,7 @@ const router = express.Router();
 
 import {home, art_page1, art_page2, inscriptionPost} from "../controllers/home.js";
 
-import {login, loginPost, profile, logout, shoppingAdd, shoppingDelete, customOrder, clientDialogue} from "../controllers/client.js";
+import {login, loginPost, profile, logout, shoppingAdd, shoppingDelete, customOrder, clientDialogue, deleteCommande, editProfile, deleteProfile} from "../controllers/client.js";
 
 import {profileAdmin, addProductPost, deleteProduit, editProduit, deleteClient, adminDialogue} from "../controllers/admin.js";
 
@@ -36,9 +36,9 @@ const adminCheck = function (req, res, next) {
     }
 };
 
-const clientCheck = function (req, res, next) {
+const sessiontCheck = function (req, res, next) {
 
-    if(req.session.isClient) 
+    if(req.session.isClient || req.session.isAdmin) 
     {
         next();
     } 
@@ -55,6 +55,7 @@ const clientCheck = function (req, res, next) {
 // ==============================================
 
 //HOME PAGE
+
 router.get("/", home);
 
 router.get("/scrapbooking", art_page1);
@@ -73,19 +74,26 @@ router.post("/sign_in/post", inscriptionPost);
 
 //PROFILE PAGE
 
-router.get("/profile/:id", clientCheck, profile);
+router.get("/profile/:id", sessiontCheck, profile);
 
 router.post("/logout", logout);
 
-router.post("/clientDialogue/:id", clientCheck, clientDialogue);
+router.post("/clientDialogue/:id", sessiontCheck, clientDialogue);
+
+router.put("/editProfile/:id", sessiontCheck, editProfile);
+
+router.post("/deleteProfile/:id", sessiontCheck, deleteProfile);
+
 
 //SHOPPING PAGE
 
-router.post("/addToBasket/:id", clientCheck, shoppingAdd);
+router.post("/addToBasket/:id", sessiontCheck, shoppingAdd);
 
-router.delete("/deleteProduitPanier/:id", clientCheck, shoppingDelete);
+router.delete("/deleteProduitPanier/:id", sessiontCheck, shoppingDelete);
 
-router.post("/order/:id", clientCheck, customOrder);
+router.post("/order/:id", sessiontCheck, customOrder);
+
+router.delete("/deleteCommande/:id", sessiontCheck, deleteCommande);
 
 
 
@@ -103,6 +111,8 @@ router.delete("/deleteClient/:id", adminCheck, deleteClient);
 router.put("/editProduct/:id", adminCheck, editProduit);
 
 router.post("/adminDialogue/:id", adminCheck, adminDialogue);
+
+
 
 
 export default router;

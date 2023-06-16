@@ -8,9 +8,9 @@
         <p><%= produit.description %></p>
         <p><%= produit.prix %></p>
         
-        <% if(locals.isClient && (produit.idUserPanier != locals.idClient)){ %>
+        <% if(locals.isClient && (produit.idUserPanier != locals.user.id)){ %>
         
-        <button class="js-addProduit-button" data-addProduct = "<%= produit.id %>" data-addClient="<%= locals.idClient %>">Ajouter au panier</button>
+        <button class="js-addProduit-button" data-addProduct = "<%= produit.id %>" data-addClient="<%= locals.user.id %>">Ajouter au panier</button>
         
         <% } %>
         

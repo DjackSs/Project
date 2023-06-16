@@ -61,9 +61,7 @@ app.use(function (req,res,next)
 // -------------session's middleware for clients account's id
 app.use((req,res,next)=>
 {
-    if(req.session.idClient) res.locals.idClient = req.session.idClient;
-    
-    if(req.session.idAdmin) res.locals.idAdmin = req.session.idAdmin;
+    if(req.session.user) res.locals.user = req.session.user;
     
     next();
     

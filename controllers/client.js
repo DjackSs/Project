@@ -48,14 +48,21 @@ export const loginPost = (req, res) =>
 	            {
 	            	if(isAllowed)
 	            	{
+	            		req.session.user =
+		                   {
+		                   	id: result[0].id,
+		                   	pseudo: result[0].pseudo,
+		                   	email: result[0].email,
+		                   	role: result[0].role
+		                   };
 	            		// -----------------Setting up session's profile for each role:
 	            		
 	            		if(result[0].role === "client")
 		                {
-		                   req.session.isClient = true;
-		                   req.session.idClient = result[0].id;
+		                    req.session.isClient = true;
+		                    req.session.idClient = result[0].id;
 		                   
-		                   res.redirect(`/profile/${result[0].id}`);
+	                		res.redirect(`/profile/${result[0].id}`);
 		                    
 		                }
 		                else if(result[0].role === "admin")
@@ -138,6 +145,28 @@ export const profile = (req, res) =>
     
 };
 
+// ----------------------------------------------------
+
+export const editProfile = (req,res) =>
+{
+    let id = req.params.id;
+    
+    const editProfile =
+    {
+        pseudo: req.body.pseudo,
+        email: req.body.email,
+    };
+
+    const query = `update User set ? where id = ?`;
+
+	pool.query(query, [editProfile, id], function (error, result, fields)
+	{
+	    error ? console.log(error) : res.status(204).send();
+
+	 });
+    
+};
+
 
 // ----------------------------------------------------
 
@@ -149,6 +178,28 @@ export const logout = (req, res) =>
 		error ? console.log(error) : res.redirect("/");
 		
 	});
+};
+
+// ----------------------------------------------------
+
+export const deleteProfile = (req,res) =>
+{
+    const deleteProfile = req.params.id;
+    
+    const query = `delete from User where id = ?`;
+        
+    req.session.destroy((error) =>
+	{
+		if(error) console.log(error);
+			
+		pool.query(query, [deleteProfile], function(error, result, fields)
+		{
+			error ? console.log(error) :  res.redirect("/");
+	
+		});
+		
+    });
+    
 };
 
 // ----------------------------------------------------
@@ -182,6 +233,21 @@ export const shoppingDelete = (req,res) =>
 	{
 		error ? console.log(error) : res.status(204).send();
 	});
+};
+
+// ----------------------------------------------------
+
+export const deleteCommande = (req,res) =>
+{
+    const deleteCommande = req.params.id;
+    
+    const query = `delete from Commande where id = ?`;
+    
+    pool.query(query, [deleteCommande], function(error, result, fields)
+    {
+        error ? console.log(error) : res.status(204).send();
+    });
+    
 };
 
 // ----------------------------------------------------
