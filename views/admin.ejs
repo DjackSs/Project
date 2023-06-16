@@ -114,8 +114,8 @@
         <article id="<%= commande.id %>">
             
             <p><%= commande.dateCommande.toLocaleString() %> </p>
-            <p> <%= commande.pseudo %></p>
-            <p> <%= commande.email %></p>
+            <p><%= commande.pseudo %></p>
+            <p><%= commande.email %></p>
             <p><%= commande.commande %></p>
             
             <div>
@@ -134,7 +134,7 @@
             
             <textarea name="commandeDialogue" id="commandeDialogue"></textarea>
             
-            <button class="js-adminDialogue-button" data-transmitter="<%= locals.user.id %>" data-commande="<%= commande.id %>" data-client="<%= commande.idUser %>">Envoi</button>
+            <button class="js-dialogue-button" data-transmitter="<%= locals.user.id %>" data-commande="<%= commande.id %>" data-client="<%= commande.idUser %>">Envoi</button>
             
             <button class="js-removeCommande-button" data-commande="<%= commande.id %>">Annuler la commande</button>
             

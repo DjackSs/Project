@@ -382,13 +382,11 @@ if(deleteCommandeButtons.length != 0)
     // DIALOGUE FETCH
 // ======================================================
 
-// ADMIN SIDE
+const dialogueButtons = document.querySelectorAll(".js-dialogue-button");
 
-const adminDialogueButtons = document.querySelectorAll(".js-adminDialogue-button");
-
-if(adminDialogueButtons.length != 0)
+if(dialogueButtons.length != 0)
 {
-    for(let button of adminDialogueButtons)
+    for(let button of dialogueButtons)
     {
         button.addEventListener("click", (e)=>
         {
@@ -406,7 +404,7 @@ if(adminDialogueButtons.length != 0)
             };
             
             
-            const url = `/adminDialogue/${id}`;
+            const url = `/dialogue/${id}`;
             
                 const options = 
                 {
@@ -425,61 +423,28 @@ if(adminDialogueButtons.length != 0)
                 
                 textArea.value = "";
                 
-               
-                
-            })
-            .catch(err => console.error(err));
-            
-            
-        });
-    }
-}
-
-
-// CLIENT SIDE
-
-const clientDialogueButtons = document.querySelectorAll(".js-clientDialogue-button");
-
-if(clientDialogueButtons.length != 0)
-{
-    for(let button of clientDialogueButtons)
-    {
-        button.addEventListener("click", (e)=>
-        {
-            (e).preventDefault();
-            
-            // ----------------------fecth settings
-            
-            const id = button.getAttribute("data-commande");
-            
-            const reply = 
-            {
-                comment: document.querySelector(`article[id="${id}"] textarea`).value,
-                idUser: button.getAttribute("data-client"),
-                idTransmitter: button.getAttribute("data-transmitter")
-            };
-            
-            
-            const url = `/clientDialogue/${id}`;
-            
-                const options = 
-                {
-                    method: 'post',
-                    headers: {'content-type': 'application/json'},
-                    body: JSON.stringify(reply)
-                };
-            
-            // ----------------------fecth actions
-            
-            fetch(url, options)
-            .then(res =>
-            {
-                
-                const textArea = document.querySelector(`article[id="${id}"] textarea`);
-                
-                textArea.value = "";
+                const dialogueDiv = document.querySelector(`article[id="${id}"] > div`);
                 
                 
+                const pseudoP = document.createElement("p");
+                const pseudo =document.querySelector(`article[id="${reply.idTransmitter}"] p:first-child`).innerHTML;
+                
+                pseudoP.append(pseudo);
+                
+                const dateP = document.createElement("p");
+                const date = new Date().toDateString();
+                
+                dateP.append(date);
+                
+                const comentP = document.createElement("p");
+                
+                comentP.append(reply.comment);
+                
+                dialogueDiv.append(pseudoP);
+                
+                dialogueDiv.append(dateP);
+                
+                dialogueDiv.append(comentP);
                
                 
             })

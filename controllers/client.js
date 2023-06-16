@@ -296,3 +296,26 @@ export const clientDialogue = (req,res) =>
     });
     
 };
+
+// ----------------------------------------------------
+
+export const dialogue = (req,res) =>
+{
+    
+    const newAdminReply =
+    {
+        id: uuidv4(),
+        idCommande: req.params.id,
+        comment: req.body.comment,
+        idUser: req.body.idTransmitter
+    };
+    
+    
+    const query = "insert into Dialogue (id, idCommande, idUser, comment, dateDialogue) values (?, ?,(select User.id from User where id = ?), ?, NOW())";
+    
+    pool.query(query, [newAdminReply.id, newAdminReply.idCommande, newAdminReply.idUser, newAdminReply.comment], function(error, result, fields)
+    {
+        error ? console.log(error) : res.status(204).send();
+    });
+    
+};

@@ -13,9 +13,9 @@ const router = express.Router();
 
 import {home, art_page1, art_page2, inscriptionPost} from "../controllers/home.js";
 
-import {login, loginPost, profile, logout, shoppingAdd, shoppingDelete, customOrder, clientDialogue, deleteCommande, editProfile, deleteProfile} from "../controllers/client.js";
+import {login, loginPost, profile, logout, shoppingAdd, shoppingDelete, customOrder, clientDialogue, deleteCommande, editProfile, deleteProfile, dialogue} from "../controllers/client.js";
 
-import {profileAdmin, addProductPost, deleteProduit, editProduit, deleteClient, adminDialogue} from "../controllers/admin.js";
+import {profileAdmin, addProductPost, deleteProduit, editProduit, deleteClient} from "../controllers/admin.js";
 
 
 
@@ -84,6 +84,8 @@ router.put("/editProfile/:id", sessiontCheck, editProfile);
 
 router.post("/deleteProfile/:id", sessiontCheck, deleteProfile);
 
+router.post("/dialogue/:id", sessiontCheck, dialogue);
+
 
 //SHOPPING PAGE
 
@@ -110,7 +112,7 @@ router.delete("/deleteClient/:id", adminCheck, deleteClient);
 
 router.put("/editProduct/:id", adminCheck, editProduit);
 
-router.post("/adminDialogue/:id", adminCheck, adminDialogue);
+
 
 
 
