@@ -13,7 +13,7 @@ const router = express.Router();
 
 import {home, art_page1, art_page2, inscriptionPost} from "../controllers/home.js";
 
-import {login, loginPost, profile, logout, shoppingAdd, shoppingDelete, customOrder, clientDialogue, deleteCommande, editProfile, deleteProfile, dialogue} from "../controllers/client.js";
+import {login, loginPost, profile, logout, shoppingAdd, shoppingDelete, customOrder, clientDialogue, deleteCommande, editProfile, deleteProfile, dialogue, shoppingPay} from "../controllers/client.js";
 
 import {profileAdmin, addProductPost, deleteProduit, editProduit, deleteClient} from "../controllers/admin.js";
 
@@ -26,7 +26,7 @@ import {profileAdmin, addProductPost, deleteProduit, editProduit, deleteClient} 
 
 const adminCheck = function (req, res, next) {
 
-    if(req.session.isAdmin) 
+    if(req.session.user.role === "admin") 
     {
         next();
     } 
@@ -38,7 +38,7 @@ const adminCheck = function (req, res, next) {
 
 const sessiontCheck = function (req, res, next) {
 
-    if(req.session.isClient || req.session.isAdmin) 
+    if(req.session.user) 
     {
         next();
     } 
@@ -89,13 +89,15 @@ router.post("/dialogue/:id", sessiontCheck, dialogue);
 
 //SHOPPING PAGE
 
-router.post("/addToBasket/:id", sessiontCheck, shoppingAdd);
+router.post("/addToCard/:id", sessiontCheck, shoppingAdd);
 
 router.delete("/deleteProduitPanier/:id", sessiontCheck, shoppingDelete);
 
 router.post("/order/:id", sessiontCheck, customOrder);
 
 router.delete("/deleteCommande/:id", sessiontCheck, deleteCommande);
+
+router.post("/buy/:id", sessiontCheck, shoppingPay);
 
 
 

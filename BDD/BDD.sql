@@ -65,7 +65,8 @@ CREATE TABLE `Produit` (
   `nom` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `category` varchar(255) NOT NULL,
-  `prix` decimal(8,2) NOT NULL
+  `prix` decimal(8,2) NOT NULL,
+  `statut` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

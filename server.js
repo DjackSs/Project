@@ -49,9 +49,7 @@ app.use(session({
 // -------------session's middleware for account status
 app.use(function (req,res,next)
 {
-    res.locals.isAdmin = req.session.isAdmin ? true : false;
-    
-    res.locals.isClient = req.session.isClient ? true : false;
+    res.locals.user = req.session.user ? true : false;
     
     next();
     

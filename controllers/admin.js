@@ -19,13 +19,13 @@ import bcrypt from 'bcryptjs';
 
 export const profileAdmin = (req, res) =>
 {
-    const query1 = `select * from Produit`;
+    const query1 = `select Produit.* from Produit order by Produit.nom`;
     
-    const query2 = `select User.id, User.pseudo, User.email, User.dateInscription, User.role from User`;
+    const query2 = `select User.id, User.pseudo, User.email, User.dateInscription, User.role from User order by User.dateInscription`;
     
-    const query3 = `select Commande.*, User.pseudo, User.email from Commande inner join User on Commande.idUser = User.id`;
+    const query3 = `select Commande.*, User.pseudo, User.email from Commande inner join User on Commande.idUser = User.id order by Commande.dateCommande`;
     
-    const query4 = `select Dialogue.*, User.pseudo from Dialogue inner join User on User.id = Dialogue.idUser`;
+    const query4 = `select Dialogue.*, User.pseudo from Dialogue inner join User on User.id = Dialogue.idUser order by Dialogue.dateDialogue`;
     
     pool.query(query1, function (error, produits, fields)
     {
@@ -73,7 +73,8 @@ export const addProductPost = (req,res) =>
         nom: req.body.name,
         description: req.body.description,
         category: req.body.category,
-        prix: req.body.price
+        prix: req.body.price,
+        statut: "free"
     };
     
     const query = `insert into Produit set ?`;
@@ -127,7 +128,8 @@ export const editProduit = (req,res) =>
         nom: req.body.nom,
         description: req.body.description,
         category: req.body.category,
-        prix: req.body.prix
+        prix: req.body.prix,
+        statut: "free"
     };
 
     const query = `update Produit set ? where id = ?`;

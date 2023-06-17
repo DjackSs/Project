@@ -22,15 +22,26 @@
 <section>
     <H3>Panier</H3>
     
-    <% for(let produit of produits) { %>
+    <% for(let produit of produits) { 
+        if(produit.statut === "free") { %>
         <article id="<%= produit.id %>">
         <p><%= produit.nom %></p>
         <p><%= produit.prix %></p>
         <p><button class="js-removeProduitPanier-button" data-produit="<%= produit.id %>">X</button> </p>
     </article>
-    <% } %>
+        <% }
+    } %>
     
     <p>Prix total : <%= prixPanier %> </p>
+    
+    <% if(produits.length != 0) { %>
+    
+        <form method="post" action="/buy/<%= locals.user.id %>">
+            <input type="submit" value="Acheter">
+        </form>
+    
+    <% } %>
+    
 </section>
 
 <section>
@@ -66,4 +77,21 @@
         
     <% } %>
 
+</section>
+<section>
+    <h3>Mes achats</h3>
+    <% for(let produit of produits) { 
+        if(produit.statut === "paye") { %>
+        
+        <article id="<%= produit.id %>">
+        <p><%= produit.nom %></p>
+        <p><%= produit.prix %></p>
+
+    </article>
+        <% }
+    } %>
+    
+    <p>Prix total : <%= prixAchat %> </p>
+    
+    
 </section>

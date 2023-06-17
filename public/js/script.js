@@ -235,7 +235,7 @@ if (editProductButtons.length != 0)
 // ======================================================
 
 
-// ADD TO BASKET FETCH
+// ADD TO CARD FETCH
 
 const addProductButtons = document.querySelectorAll(".js-addProduit-button");
 
@@ -254,7 +254,7 @@ if(addProductButtons.length != 0)
             const idProduct = button.getAttribute("data-addProduct");
             
  
-            const url = `/addToBasket/${idClient}`;
+            const url = `/addToCard/${idClient}`;
             
             const data =
             {
@@ -294,14 +294,14 @@ if(addProductButtons.length != 0)
 }
 
 
-// DELETE FROM BASKET FETCH
+// DELETE FROM CARD FETCH
 
-const deleteProductBasketButtons = document.querySelectorAll(".js-removeProduitPanier-button");
+const deleteProductCardButtons = document.querySelectorAll(".js-removeProduitPanier-button");
 
 
-if(deleteProductBasketButtons.length != 0)
+if(deleteProductCardButtons.length != 0)
 {
-    for(let button of deleteProductBasketButtons)
+    for(let button of deleteProductCardButtons)
     {
         button.addEventListener("click", (e)=>
         {

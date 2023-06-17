@@ -49,25 +49,23 @@ export const loginPost = (req, res) =>
 	            	if(isAllowed)
 	            	{
 	            		req.session.user =
-		                   {
-		                   	id: result[0].id,
-		                   	pseudo: result[0].pseudo,
-		                   	email: result[0].email,
-		                   	role: result[0].role
-		                   };
+		                {
+			                   id: result[0].id,
+			                   pseudo: result[0].pseudo,
+			                   email: result[0].email,
+			                   role: result[0].role
+		                };
 	            		// -----------------Setting up session's profile for each role:
 	            		
 	            		if(result[0].role === "client")
 		                {
 		                    req.session.isClient = true;
-		                    req.session.idClient = result[0].id;
 		                   
 	                		res.redirect(`/profile/${result[0].id}`);
 		                    
 		                }
 		                else if(result[0].role === "admin")
 		                {
-		                	req.session.idAdmin = result[0].id;
 		                    req.session.isAdmin = true;
 		                    
 		                    res.redirect("/admin");
@@ -92,13 +90,13 @@ export const profile = (req, res) =>
 {
 	const userId = req.params.id;
 	
-	const query1 = `select Produit.* from Produit inner join Produit_Panier on idProduit = Produit.id inner join Panier on idPanier = Panier.id where idUserPanier = ?`;
+	const query1 = `select Produit.* from Produit inner join Produit_Panier on idProduit = Produit.id inner join Panier on idPanier = Panier.id where idUserPanier = ? order by Produit.nom`;
 	
-	const query2= `update Panier set prixPanier = ? where idUserPanier = ?`;
+	const query2= `update Panier set Panier.prixPanier = ? where Panier.idUserPanier = ? and Panier.statut = "cree"`;
 	
-	const query3 = `select Commande.* from Commande where idUser = ?`;
+	const query3 = `select Commande.* from Commande where idUser = ? order by Commande.dateCommande`;
 	
-	const query4 = `select Dialogue.*, User.pseudo from Commande left join Dialogue on Dialogue.idCommande = Commande.id left join User on Dialogue.idUser = User.id where Commande.idUser = ?`;
+	const query4 = `select Dialogue.*, User.pseudo from Commande left join Dialogue on Dialogue.idCommande = Commande.id left join User on Dialogue.idUser = User.id where Commande.idUser = ? order by Dialogue.dateDialogue`;
 	
 	
 	pool.query(query1, [userId], function(error, produits, fields)
@@ -106,14 +104,23 @@ export const profile = (req, res) =>
 	
 		if(error) console.log(error);
 		
-		let totalPrice= 0;
+		let totalPricePanier= 0;
+		let totalPricePaye= 0;
 		
 		for(let produit of produits)
 		{
-			totalPrice += produit.prix;
+			if(produit.statut === "free")
+			{
+				totalPricePanier += produit.prix;
+			}
+			if(produit.statut === "paye")
+			{
+				totalPricePaye += produit.prix;
+			}
+			
 		}
 		
-		pool.query(query2, [totalPrice, userId], function(error, result, fields)
+		pool.query(query2, [totalPricePanier, userId], function(error, result, fields)
 		{
 			if(error) console.log(error);
 			
@@ -129,7 +136,8 @@ export const profile = (req, res) =>
 					{
 					    template: 'profile.ejs',
 					    produits: produits,
-					    prixPanier: totalPrice,
+					    prixPanier: totalPricePanier,
+					    prixAchat: totalPricePaye,
 					    commandes: commandes,
 					    dialogues: dialogues
 					        
@@ -232,6 +240,50 @@ export const shoppingDelete = (req,res) =>
 	pool.query(query, [idProduit], function(error, result, fields)
 	{
 		error ? console.log(error) : res.status(204).send();
+	});
+};
+
+// ----------------------------------------------------
+
+export const shoppingPay = (req,res) =>
+{
+	const idClient = req.params.id;
+	
+	const panierStatus = "paye";
+	
+	const query1 = `update Panier set statut = ? where IdUserPanier = ?`;
+	
+	const query2 = `update Produit inner join Produit_Panier on Produit.id = Produit_Panier.idProduit inner join Panier on Produit_Panier.idPanier = Panier.id set Produit.statut = Panier.statut where Panier.idUserPanier = ?`;
+	
+	const newCard =
+            	{
+            		id: uuidv4(),
+            		idUserPanier: idClient,
+            		prixPanier: 0,
+            		statut: "Cree"
+            	};
+	
+	const query3 = `insert into Panier (id, idUserPanier, prixPanier, statut, dateCreation) value (?, ?, ?, ?, NOW())`;
+	
+	// const query2 = `delete from Produit where id = (select Pr.id from (select * from Produit) as Pr inner join (select * from Produit_Panier) as PP on Pr.id = PP.idProduit inner join (select * from Panier) as Pa on Pa.id = PP.idPanier where Pa.idUserPanier in(?))`;
+	
+	pool.query(query1, [panierStatus, idClient], function(error, result, fields)
+	{
+		if(error) console.log(error);
+		
+		pool.query(query2, [idClient], function(error, result, fields)
+		{
+			if(error) console.log(error);
+			
+			pool.query(query3, [newCard.id, newCard.idUserPanier, newCard.prixPanier, newCard.statut], function(error, result, fields)
+			{
+				if(error) console.log(error);
+				
+				res.redirect(`/profile/${idClient}`);
+				
+			});
+			
+		});
 	});
 };
 

@@ -33,11 +33,11 @@ export const home = (req, res) =>
 export const art_page1 = (req, res) =>
 {
     
-    let query = `select Produit.* from Produit where category in("scrapbooking")`;
+    let query = `select Produit.* from Produit where category in("scrapbooking") order by Produit.nom`;
     
-    if(req.session.idClient)
+    if(req.session.user)
     {
-        query = `select Produit.*, Panier.idUserPanier from Produit left join Produit_Panier on idProduit = Produit.id left join Panier on Produit_Panier.idPanier = Panier.id where category in ("scrapbooking")`;
+        query = `select Produit.*, Panier.idUserPanier from Produit left join Produit_Panier on idProduit = Produit.id left join Panier on Produit_Panier.idPanier = Panier.id where category in ("scrapbooking") order by Produit.nom`;
     }
 
     
@@ -47,7 +47,7 @@ export const art_page1 = (req, res) =>
         
         let sortedProduits = produits;
         
-        if(req.session.idClient)
+        if(req.session.user)
         {
             sortedProduits = processData (produits, req.session.idClient);
         }
@@ -74,11 +74,11 @@ export const art_page1 = (req, res) =>
 export const art_page2 = (req, res) =>
 {
     
-    let query = `select Produit.* from Produit where category in("digital_art")`;
+    let query = `select Produit.* from Produit where category in("digital_art") order by Produit.nom`;
     
-    if(req.session.idClient)
+    if(req.session.user)
     {
-        query = `select Produit.*, Panier.idUserPanier from Produit left join Produit_Panier on idProduit = Produit.id left join Panier on Produit_Panier.idPanier = Panier.id where category in ("digital_art")`;
+        query = `select Produit.*, Panier.idUserPanier from Produit left join Produit_Panier on idProduit = Produit.id left join Panier on Produit_Panier.idPanier = Panier.id where category in ("digital_art") order by Produit.nom`;
     }
     
     pool.query(query, function(error, produits, fields)
@@ -87,7 +87,7 @@ export const art_page2 = (req, res) =>
         
         let sortedProduits = produits;
         
-        if(req.session.idClient)
+        if(req.session.user)
         {
             sortedProduits = processData (produits, req.session.idClient);
         }
@@ -125,7 +125,7 @@ export const inscriptionPost = (req, res) =>
                     role: "client"
                 };
                 
-            const newBasket =
+            const newCard =
             	{
             		id: uuidv4(),
             		idUserPanier: newClient.id,
@@ -142,7 +142,7 @@ export const inscriptionPost = (req, res) =>
             {
                 if(error) console.log(error); 
                 
-                pool.query(query2, [newBasket.id, newBasket.idUserPanier,newBasket.prixPanier, newBasket.statut], function (error,result2, fields)
+                pool.query(query2, [newCard.id, newCard.idUserPanier,newCard.prixPanier, newCard.statut], function (error,result2, fields)
                 {
                     error ? console.log(error) : res.redirect("/");
                     
