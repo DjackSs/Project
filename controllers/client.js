@@ -220,7 +220,7 @@ export const shoppingAdd = (req,res) =>
 		idProduit: req.body.idProduit
 	};
 	
-	const query = `insert into Produit_Panier (idPanier, idProduit) values ((select id from Panier where idUserPanier = ?), ?)`;
+	const query = `insert into Produit_Panier (idPanier, idProduit) values ((select id from Panier where Panier.idUserPanier = ? and Panier.statut = "Cree"), ?)`;
 	
 	
 	pool.query(query,[shopItem.idUserPanier, shopItem.idProduit], function(error, result, fields)

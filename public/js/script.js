@@ -229,6 +229,49 @@ if (editProductButtons.length != 0)
 }
 
 
+// CLOSE BUYING FETCH
+
+const closeBuyingButton = document.querySelectorAll(".js-closebuying-button");
+
+if(closeBuyingButton.length != 0)
+{
+    for(let button of closeBuyingButton)
+    {
+        button.addEventListener("click", (e)=>
+        {
+            (e).preventDefault();
+            
+            const id = button.getAttribute("data-card");
+            
+            
+            // ----------------------DOM settings
+            
+            const article = document.querySelector(`article[id="${id}`);
+            
+            // ----------------------fecth settings
+            
+            const url = `/closeBuying/${id}`;
+            
+            const options = 
+               {
+                    method: 'put',
+                    headers: {'content-type': 'application/json'}
+                };
+                
+            fetch(url, options)
+            .then(res =>
+            {
+                    
+                article.remove();
+                    
+                    
+            })
+            .catch(err => console.error(err));
+            
+        });
+    }
+}
+
 
 // ======================================================
     // CLIENT FETCH

@@ -34,7 +34,7 @@
     
     <p>Prix total : <%= prixPanier %> </p>
     
-    <% if(produits.length != 0) { %>
+    <% if(prixPanier) { %>
     
         <form method="post" action="/buy/<%= locals.user.id %>">
             <input type="submit" value="Acheter">

@@ -27,6 +27,8 @@ export const profileAdmin = (req, res) =>
     
     const query4 = `select Dialogue.*, User.pseudo from Dialogue inner join User on User.id = Dialogue.idUser order by Dialogue.dateDialogue`;
     
+    const query5 = `select Produit.*, Panier.*, User.pseudo, User.email from Produit inner join Produit_Panier on Produit.id = Produit_Panier.idProduit inner join Panier on Produit_Panier.idPanier = Panier.id inner join User on Panier.idUserPanier = User.id where Panier.statut = "paye" order by User.email`; 
+    
     pool.query(query1, function (error, produits, fields)
     {
         if(error) console.log(error);
@@ -43,16 +45,25 @@ export const profileAdmin = (req, res) =>
                 {
                     if(error) console.log(error);
                     
-                    res.render("layout.ejs",
+                    pool.query(query5, function(error, achats, fields)
                     {
-                        template: "admin.ejs",
-                        produits: produits,
-                        users: users,
-                        commandes: commandes,
-                        dialogues: dialogues
+                        if(error) console.log(error);
+                        
+                        const processedAchats = processAchats(achats);
+                        
+                        res.render("layout.ejs",
+                        {
+                            template: "admin.ejs",
+                            produits: produits,
+                            users: users,
+                            commandes: commandes,
+                            achats: processedAchats,
+                            dialogues: dialogues
+                            
+                        });
                         
                     });
-                    
+            
                 });
                 
                 
@@ -142,3 +153,97 @@ export const editProduit = (req,res) =>
     
 };
 
+// ----------------------------------------------------
+
+export const closeBuying = (req,res) =>
+{
+    const id = req.params.id;
+    
+    const panierStatus = "livre";
+    
+    const query = `update Panier set dateCloture = NOW(), statut = ? where id = ?`;
+    
+    const query2 = `update Produit inner join Produit_Panier on Produit.id = Produit_Panier.idProduit inner join Panier on Produit_Panier.idPanier = Panier.id set Produit.statut = Panier.statut where Panier.id = ?`;
+
+	pool.query(query, [panierStatus, id], function (error, result, fields)
+	{
+	    if(error) console.log(error);
+	    
+	    pool.query(query2,[id], function(error, result2, fields)
+	    {
+	        error ? console.log(error) : res.status(204).send();
+	  
+	    });
+	    
+
+	 });
+    
+};
+
+
+
+
+
+
+// ----------------------------------------------------
+
+
+
+function processAchats (array)
+{
+  let newArray= [];
+  let panierArray= [];
+  let produits = [];
+  
+  
+  for(let item of array)
+  {
+    
+    let newObject =
+    {
+      idPanier:item.id,
+      idClient:item.idUserPanier,
+      pseudoClient: item.pseudo,
+      email: item.email,
+      prixPanier: item.prixPanier,
+      produits:produits
+   
+    };
+  
+  let newProduit =
+    {
+      nom: item.nom,
+      description:item.description,
+      category:item.category,
+      prix:item.prix,
+    };
+    
+    
+    
+    if(panierArray.includes(item.id))
+    {
+      produits.push(newProduit);
+    }
+    else
+    {
+      
+      produits = [];
+      
+      produits.push(newProduit);
+      
+      newObject.produits = produits;
+      
+      newArray.push(newObject);
+      
+      
+    }
+    
+  panierArray.push(item.id);
+    
+    
+  }
+  
+  
+  return newArray;
+  
+}

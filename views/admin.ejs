@@ -143,3 +143,25 @@
     <% } %>
     
 </section>
+<section>
+    <h3>Gestion des achats :</h3>
+    <% for(let panier of achats) { %>
+        <article id="<%= panier.idPanier %>">
+            
+            <p><%= panier.pseudoClient %></p>
+            <p><%= panier.email %></p>
+            
+            <% for(let produit of panier.produits) { %>
+                <p><%= produit.nom %></p>
+                <p><%= produit.category %></p>
+                <p><%= produit.prix %></p>
+            <% } %>
+            
+            <p><%= panier.prixPanier %></p>
+            
+            <button class="js-closebuying-button" data-card="<%= panier.idPanier %>">Achats livrés</button>
+            
+        </article>
+        
+    <% } %>
+</section>
