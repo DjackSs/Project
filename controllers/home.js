@@ -130,7 +130,7 @@ export const inscriptionPost = (req, res) =>
             		id: uuidv4(),
             		idUserPanier: newClient.id,
             		prixPanier: 0,
-            		statut: "Cree"
+            		statut: "cree"
             	};
                 
             const query1 = "insert into User (id, pseudo, email, mdp, role, dateInscription) value (?, ?, ?, ?, ?, NOW())";
@@ -144,7 +144,17 @@ export const inscriptionPost = (req, res) =>
                 
                 pool.query(query2, [newCard.id, newCard.idUserPanier,newCard.prixPanier, newCard.statut], function (error,result2, fields)
                 {
-                    error ? console.log(error) : res.redirect("/");
+                    if(error) console.log(error);
+                    
+                    req.session.user =
+		                {
+			                   id: newClient.id,
+			                   pseudo: newClient.pseudo,
+			                   email: newClient.email,
+			                   role: newClient.role
+		                };
+		                
+		            res.redirect(`/profile/${newClient.id}`);
                     
                 });
                 

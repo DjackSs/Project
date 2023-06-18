@@ -59,14 +59,12 @@ export const loginPost = (req, res) =>
 	            		
 	            		if(result[0].role === "client")
 		                {
-		                    req.session.isClient = true;
 		                   
 	                		res.redirect(`/profile/${result[0].id}`);
 		                    
 		                }
 		                else if(result[0].role === "admin")
 		                {
-		                    req.session.isAdmin = true;
 		                    
 		                    res.redirect("/admin");
 		                }
@@ -220,7 +218,7 @@ export const shoppingAdd = (req,res) =>
 		idProduit: req.body.idProduit
 	};
 	
-	const query = `insert into Produit_Panier (idPanier, idProduit) values ((select id from Panier where Panier.idUserPanier = ? and Panier.statut = "Cree"), ?)`;
+	const query = `insert into Produit_Panier (idPanier, idProduit) values ((select id from Panier where Panier.idUserPanier = ? and Panier.statut = "cree"), ?)`;
 	
 	
 	pool.query(query,[shopItem.idUserPanier, shopItem.idProduit], function(error, result, fields)
@@ -251,7 +249,7 @@ export const shoppingPay = (req,res) =>
 	
 	const panierStatus = "paye";
 	
-	const query1 = `update Panier set statut = ? where IdUserPanier = ?`;
+	const query1 = `update Panier set Panier.statut = ? where Panier.IdUserPanier = ? and Panier.statut = "cree"`;
 	
 	const query2 = `update Produit inner join Produit_Panier on Produit.id = Produit_Panier.idProduit inner join Panier on Produit_Panier.idPanier = Panier.id set Produit.statut = Panier.statut where Panier.idUserPanier = ?`;
 	
@@ -260,7 +258,7 @@ export const shoppingPay = (req,res) =>
             		id: uuidv4(),
             		idUserPanier: idClient,
             		prixPanier: 0,
-            		statut: "Cree"
+            		statut: "cree"
             	};
 	
 	const query3 = `insert into Panier (id, idUserPanier, prixPanier, statut, dateCreation) value (?, ?, ?, ?, NOW())`;

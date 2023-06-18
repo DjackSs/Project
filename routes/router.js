@@ -25,15 +25,21 @@ import {profileAdmin, addProductPost, deleteProduit, editProduit, deleteClient, 
 // -----------------------routes protection's middleware
 
 const adminCheck = function (req, res, next) {
-
-    if(req.session.user.role === "admin") 
+    
+    if(req.session.user)
     {
-        next();
-    } 
-    else 
+        if(req.session.user.role === "admin") 
+        {
+            next();
+        } 
+        
+    }
+    else
     {
         res.redirect('/login');
     }
+    
+   
 };
 
 const sessiontCheck = function (req, res, next) {

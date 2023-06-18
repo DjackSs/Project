@@ -48,7 +48,8 @@
     	            <th>Prix</th>
     		</thead>
     		<tbody >
-    			<% for(let produit of produits) { %>
+    			<% for(let produit of produits) { 
+    			    if(produit.statut === "free") {%>
     			
     				<tr id="<%= produit.id %>">
     					<td>
@@ -68,8 +69,8 @@
     	                    <button class="js-editProduit-button" data-produit="<%=produit.id%>">Edit</button>
     	                </td>
     				</tr>
-    				
-    			<% } %>
+    				<% }
+    			} %>
     		</tbody>
     	</table>
 </section>
