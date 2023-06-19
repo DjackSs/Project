@@ -2,37 +2,75 @@
 <html lang="fr">
 <head>
     <meta charset="utf-8">
-    <title>Project</title>
+    <meta name="description" content="Come and discover the art of Couisse De Poupou !">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>L'Art de Cuisse De Poupou</title>
+    
+    <!-- flavicon -->
+    <link rel="icon" type="image/x-icon" href="/assets/image/Favicon_png.png">
 
     <!-- stylesheet -->
     <link rel="stylesheet" href="/css/style.css" type="text/css">
+    
 </head>
 <body>
-    <header class="blog-header">
-        <div>
-            <nav>
-                <a href="/">Home</a>
-                <a href="/scrapbooking">Scrapbooking</a>
-                <a href="/art_numerique">Art Numérique</a>
+    <header>
+        <div class="header-top">
+            
+            <form>
+                    
+                <label for="light">Light</label>
+                <input type="radio" name="theme" id="light" checked>
+                
+                <label for="dark">Dark</label>
+                <input type="radio" name="theme" id="dark">
+                
+            </form>
+
+            <div>
                 
                 <% if(locals.user.role === "client"){ %>
-                
                     
-                    <a href="/profile/<%= locals.user.id %>">Profile</a>
-                    
-                    
+                        
+                    <a href="/profile/<%= locals.user.id %>" class="login_link">
+                        <div>
+                            <img src="/assets/image/Widget_profil.png" alt="">
+                            <p>Profile</p>
+                        </div>
+                    </a>
+                        
+                        
                 <% } else if(locals.user.role === "admin") { %>
-                    
-                    <a href="/admin">Profile</a>
-            
-                <% } else { %>
+                        
+                    <a href="/admin" class="login_link">Profile</a>
                 
-                    <a href="/login">Connexion</a>
+                <% } else { %>
                     
+                    <a href="/login" class="login_link" >Connexion / Inscription</a>
+                        
                 <% } %>
+                
+            </div>
+        </div>
+        <div>
+            <nav class="container">
+                <a href="/scrapbooking">Scrapbooking</a>
+                    
+                <a href="/" class="logo">
+                        <img src="/assets/image/CDP_logo.svg" alt="Logo de Cuisse De Poupou: un raton mange une cuisse de poulet!">
+                </a>
+                    
+                <a href="/art_numerique">Art Numérique</a>
+                    
+                
             </nav>
         </div>
     </header>
+    <script>
+    // -----------------This allow the color theme to be loaded sooner to prevent light flashing with the dark theme
+        if(window.localStorage.getItem("theme") === "dark") document.querySelector(`.header-top input[type="radio"][id="dark"]`).checked = true;
+    </script>
 
     <main>
      

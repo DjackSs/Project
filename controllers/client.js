@@ -262,8 +262,7 @@ export const shoppingPay = (req,res) =>
             	};
 	
 	const query3 = `insert into Panier (id, idUserPanier, prixPanier, statut, dateCreation) value (?, ?, ?, ?, NOW())`;
-	
-	// const query2 = `delete from Produit where id = (select Pr.id from (select * from Produit) as Pr inner join (select * from Produit_Panier) as PP on Pr.id = PP.idProduit inner join (select * from Panier) as Pa on Pa.id = PP.idPanier where Pa.idUserPanier in(?))`;
+
 	
 	pool.query(query1, [panierStatus, idClient], function(error, result, fields)
 	{
@@ -352,7 +351,7 @@ export const clientDialogue = (req,res) =>
 export const dialogue = (req,res) =>
 {
     
-    const newAdminReply =
+    const newReply =
     {
         id: uuidv4(),
         idCommande: req.params.id,
@@ -363,7 +362,7 @@ export const dialogue = (req,res) =>
     
     const query = "insert into Dialogue (id, idCommande, idUser, comment, dateDialogue) values (?, ?,(select User.id from User where id = ?), ?, NOW())";
     
-    pool.query(query, [newAdminReply.id, newAdminReply.idCommande, newAdminReply.idUser, newAdminReply.comment], function(error, result, fields)
+    pool.query(query, [newReply.id, newReply.idCommande, newReply.idUser, newReply.comment], function(error, result, fields)
     {
         error ? console.log(error) : res.status(204).send();
     });

@@ -1,25 +1,45 @@
-<h2>Connexion</h2>
-<form method="post" action="/login/post" autocomplete="on">
+<img src="/assets/image/Banniere_haut.svg" alt="Border in chicken's hips">
+<section class="container">
+    <h2>Connexion</h2>
     
-    <label for="loginEmail">Adresse mail:</label>
-    <input type="email" name="email" id="loginEmail" autocomplete="on">
+    <form method="post" action="/login/post" autocomplete="on">
+        
+        <fieldset>
+            <legend>Connectez-vous à votre espace :</legend>
+            
+            <label for="loginEmail">Adresse mail:</label>
+            <input type="email" name="email" id="loginEmail" autocomplete="on">
+            
+            <label for="loginMdp">Mot de passe:</label>
+            <input type="password" name="mdp" id="loginMdp" autocomplete="on">
+            
+            <input type="submit" value="Valider">
+            
+        </fieldset>
+    </form>
     
-    <label for="loginMdp">Mot de passe:</label>
-    <input type="password" name="mdp" id="loginMdp" autocomplete="on">
-    
-    <input type="submit" value="Valider">
-</form>
+</section>
 
-<h2>Inscription</h2>
-<form method="post" action="/sign_in/post" autocomplete="on">
-    <label for="pseudo">Nom:</label>
-    <input type="text" name="pseudo" id="pseudo" autocomplete="on">
-    
-    <label for="email">Adresse mail:</label>
-    <input type="email" name="email" id="email" autocomplete="on">
-    
-    <label for="mdp">Mot de passe:</label>
-    <input type="password" name="mdp" id="mdp" autocomplete="on">
-    
-    <input type="submit" value="Valider">
-</form>
+<section class="container">
+
+    <h2>Inscription</h2>
+    <form method="post" action="/sign_in/post" autocomplete="on">
+        <fieldset>
+            <legend> Pas de compte ?</legend>
+            
+                <label for="pseudo">Nom:</label>
+                <input type="text" name="pseudo" id="pseudo" autocomplete="on">
+                
+                <label for="email">Adresse mail:</label>
+                <input type="email" name="email" id="email" autocomplete="on">
+                
+                <label for="mdp">Mot de passe:</label>
+                <input type="password" name="mdp" id="mdp" autocomplete="on">
+                
+                <input type="submit" value="Valider">
+             
+            </fieldset>
+    </form>
+
+</section>
+<img src="/assets/image/Banniere_bas.svg" alt="Border in chicken's hips">

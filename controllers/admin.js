@@ -185,7 +185,7 @@ export const closeBuying = (req,res) =>
 
 
 
-// ----------------------------------------------------
+// ----------------------------------------------------This function process query on Produit.* / Panier.* where statut is "paye". It allow to regroupe  all product in the Card that they bellong per client.
 
 
 

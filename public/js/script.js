@@ -1,3 +1,39 @@
+// ======================================================
+    // COLOR THEME
+// ======================================================
+
+const themeButtons = document.querySelectorAll(`.header-top input[type="radio"]`);
+
+console.log(themeButtons);
+
+const activeTheme = window.localStorage.getItem("theme");
+
+if (themeButtons.length != 0)
+{
+    for(let button of themeButtons)
+    {
+        if(button.id === activeTheme)
+        {
+            button.checked = true;
+        }
+        
+        button.addEventListener("click", ()=>
+        {
+            
+            if(button.id === "light")
+            {
+                window.localStorage.setItem("theme", "light");
+            }
+            else if(button.id === "dark")
+            {
+                window.localStorage.setItem("theme", "dark");
+            }
+        });
+    }
+}
+
+// https://www.youtube.com/watch?v=fyuao3G-2qg
+
 
 
 
