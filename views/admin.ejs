@@ -17,7 +17,7 @@
 <section>
     <h3>Ajouter un produit</h3>
     
-    <form method="post" action="/addProductPost">
+    <form method="post" action="/addProductPost" enctype="multipart/form-data">
         
         <label for="name">Nom du produit</label>
         <input type="text" name="name" id="name">
@@ -33,6 +33,9 @@
         
         <label for="price">Prix</label>
         <input type="text" name="price" id="price">
+        
+        <label for="image">Ajouter une image :</label>
+        <input type="file" name="image" id="image">
         
         <input type="submit" value="Ajouter">
         

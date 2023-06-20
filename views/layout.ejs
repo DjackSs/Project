@@ -28,22 +28,24 @@
                 
             </form>
 
-            <div>
+            <div class="login_link">
                 
                 <% if(locals.user.role === "client"){ %>
                     
                         
-                    <a href="/profile/<%= locals.user.id %>" class="login_link">
-                        <div>
-                            <img src="/assets/image/Widget_profil.png" alt="">
+                    <a href="/profile/<%= locals.user.id %>">
+                        
+                            <img src="/assets/image/Widget_profil.png" alt="icone de profile" />
                             <p>Profile</p>
-                        </div>
+    
                     </a>
                         
                         
                 <% } else if(locals.user.role === "admin") { %>
                         
-                    <a href="/admin" class="login_link">Profile</a>
+                    <a href="/admin">
+                        <img src="/assets/image/Widget_profil.png" alt="icone de profile" />
+                        <p>Profile</p></a>
                 
                 <% } else { %>
                     
@@ -62,7 +64,6 @@
                 </a>
                     
                 <a href="/art_numerique">Art Numérique</a>
-                    
                 
             </nav>
         </div>
@@ -71,11 +72,26 @@
     // -----------------This allow the color theme to be loaded sooner to prevent light flashing with the dark theme
         if(window.localStorage.getItem("theme") === "dark") document.querySelector(`.header-top input[type="radio"][id="dark"]`).checked = true;
     </script>
+    
 
     <main>
+        
+        <nav class="sticky-nav container">
+                <a href="/scrapbooking">Scrapbooking</a>
+                    
+                <a href="/">
+                        <img src="/assets/image/CDP_logo.svg" alt="Logo de Cuisse De Poupou: un raton mange une cuisse de poulet!">
+                </a>
+                    
+                <a href="/art_numerique">Art Numérique</a>
+                
+        </nav>
+        
+        <img src="/assets/image/Banniere_haut.svg" alt="Border in chicken's hips">
      
         <%- include(template) -%> 
         
+        <img src="/assets/image/Banniere_bas.svg" alt="Border in chicken's hips">
     </main>
 
     <footer>

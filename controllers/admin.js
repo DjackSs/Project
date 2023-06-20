@@ -11,6 +11,12 @@ import { v4 as uuidv4 } from 'uuid';
 // -----------------------import the data encryptor
 import bcrypt from 'bcryptjs';
 
+// -----------------------import the files upload parser
+import formidable from "formidable";
+
+// -----------------------import the files system manager from node
+import fs from "fs";
+
 
 // ==============================================
 // CONTROLLERS
@@ -78,23 +84,68 @@ export const profileAdmin = (req, res) =>
 
 export const addProductPost = (req,res) =>
 {
-    const newProduct =
-    {
-        id: uuidv4(),
-        nom: req.body.name,
-        description: req.body.description,
-        category: req.body.category,
-        prix: req.body.price,
-        statut: "free"
-    };
+    // -------------formibable 3.0 = new synthax
+    const form = formidable({});
     
-    const query = `insert into Produit set ?`;
-    
-    pool.query(query,[newProduct], function(error, result, fields)
+    form.parse(req, (error, field, files)=>
     {
-        error ? console.log(error) : res.redirect("/admin");
+        
+        // -----------------------formatting the file's name
+        const extention = "."+files.image[0].originalFilename.split(".").pop();
+        const oldPath = files.image[0].filepath;
+        const newPath = "./public/upload/upload"+files.image[0].newFilename+extention;
+        
+        // -----------------------max weight that can be upload, here is 5Mo
+        const maxLoad = 5*1024*1024;
+        
+        const acceptedMIME = ["text/csv","image/gif","image/jpeg","video/mpeg","video/ogg","image/png","application/pdf","video/webm","image/webp"];
+        
+        
+        if(files.image.size > maxLoad)
+        {
+        	console.log("trop gros!");
+        }
+        else if(!acceptedMIME.includes(files.image[0].mimetype))
+        {
+        	console.log("erreur MIME");
+        }
+        else
+        {
+            // ------------if requires are meets, the file is uploaded
+        	fs.copyFile(oldPath, newPath, (error) =>
+	        {
+	            if(error) console.log("erreur d'upload");
+	            
+	            const newProduct =
+                {
+                    id: uuidv4(),
+                    nom: field.name,
+                    description: field.description,
+                    category: field.category,
+                    prix: field.price,
+                    img: "/upload/upload"+files.image[0].newFilename+extention,
+                    statut: "free"
+                };
+                
+                const query = `insert into Produit set ?`;
+            
+                pool.query(query,[newProduct], function(error, result, fields)
+                {
+                    error ? console.log(error) : res.redirect("/admin");
+                });
+	            
+	            
+	        });
+        }
+        
+        
+        
+  
+            
     });
-};
+ };
+    
+    
 
 // ----------------------------------------------------
 
@@ -102,11 +153,29 @@ export const deleteProduit = (req,res) =>
 {
     const deleteProduct = req.params.id;
     
-    const query = `delete from Produit where id = ?`;
+    const query1 =`select Produit.* from Produit where Produit.id = ?`;
     
-    pool.query(query, [deleteProduct], function(error, result, fields)
+    const query2 = `delete from Produit where id = ?`;
+    
+    
+    pool.query(query1, [deleteProduct], function(error, produit, fields)
     {
-        error ? console.log(error) : res.status(204).send();
+        if(error) console.log(error);
+        
+        // ---------------Here we delte the file in the upload directory
+        fs.unlink("./public"+produit[0].img,function(error)
+        {
+            if(error) console.log(error);
+            
+            pool.query(query2, [deleteProduct], function(error, result, fields)
+            {
+                error ? console.log(error) : res.status(204).send();
+                
+            });
+            
+        });
+        
+        
     });
     
 };
